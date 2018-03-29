@@ -1,0 +1,20 @@
+{
+	"groups": [
+		{
+			"keys": "config_born_json,sound_game_mp3",
+			"name": "preload"
+		}
+	],
+	"resources": [
+		{
+			"url": "config/config_born.json",
+			"type": "json",
+			"name": "config_born_json"
+		},
+		{
+			"name": "sound_game_mp3",
+			"type": "sound",
+			"url": "sound/sound_game.mp3"
+		}
+	]
+}
