@@ -17,7 +17,7 @@ class GamePanel extends egret.DisplayObjectContainer
     private _channelGame:egret.SoundChannel;
     //游戏时间
     private _nGameTime:number;
-    private _timer:egret.Timer;
+    private _nTimeFlag:number;
     //当前使用的音符下标
     private _nNoteIndex:number;
 
@@ -27,7 +27,7 @@ class GamePanel extends egret.DisplayObjectContainer
 
         this._soundGame = RES.getRes("sound_game_mp3");
         this._nGameTime = 0;
-        this._timer = new egret.Timer(GamePanel.INTERVAL_TIME, 0);
+        this._nTimeFlag = 0;
         this._nNoteIndex = 0;
 
         this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
@@ -44,8 +44,9 @@ class GamePanel extends egret.DisplayObjectContainer
         this._channelGame = this._soundGame.play(0, 1);
         this._channelGame.addEventListener(egret.Event.SOUND_COMPLETE, this.onGameSoundComplete, this);
         //启动计时器
-        this._timer.addEventListener(egret.TimerEvent.TIMER, this.timerFunc, this);
-        this._timer.start();
+        this._nGameTime = 0;
+        this._nTimeFlag = egret.getTimer();
+        egret.startTick(this.timerFunc, this);
     }
 
     private onRemoveFromStage(event:egret.Event)
@@ -61,9 +62,9 @@ class GamePanel extends egret.DisplayObjectContainer
     /**
      * 计时器回调
      */
-    private timerFunc(event:egret.Event) 
+    private timerFunc(curTime:number):boolean 
     {
-        this._nGameTime += GamePanel.INTERVAL_TIME;
+        this._nGameTime = (curTime - this._nTimeFlag);
         var arrBorn:any[] = ConfigManager.getInstance()._arrBorn;
         var nTime:number;
         var nPathWay:number;
@@ -79,8 +80,9 @@ class GamePanel extends egret.DisplayObjectContainer
             note.y = -note.height;
             this.addChild(note);
             console.log("开始",this._nGameTime);
-            egret.Tween.get(note).to({y:this.stage.stageHeight}, 1666).call(this.removeNote, this, [note]);
+            egret.Tween.get(note).to({y:this.stage.stageHeight}, 1000).call(this.removeNote, this, [note]);
         }
+        return false;
     }
 
     private removeNote(note:NoteItem):void
@@ -104,11 +106,7 @@ class GamePanel extends egret.DisplayObjectContainer
             this._channelGame.stop();
             this._channelGame = null;
         }
-        if (this._timer)
-        {
-            this._timer.removeEventListener(egret.TimerEvent.TIMER, this.timerFunc, this);
-            this._timer.stop();
-        }
+        egret.stopTick(this.timerFunc, this);
     }
 
     /**
@@ -180,13 +178,9 @@ class GamePanel extends egret.DisplayObjectContainer
             this._channelGame.stop();
             this._channelGame = null;
         }
-        if (this._timer)
-        {
-            this._timer.removeEventListener(egret.TimerEvent.TIMER, this.timerFunc, this);
-            this._timer.stop();
-        }
         this._nGameTime = 0;
         this._nNoteIndex = 0;
+        egret.stopTick(this.timerFunc, this);
         NoteManager.getInstance().HideAllNote();
     }
 }

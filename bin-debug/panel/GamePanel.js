@@ -17,7 +17,7 @@ var GamePanel = (function (_super) {
         var _this = _super.call(this) || this;
         _this._soundGame = RES.getRes("sound_game_mp3");
         _this._nGameTime = 0;
-        _this._timer = new egret.Timer(GamePanel.INTERVAL_TIME, 0);
+        _this._nTimeFlag = 0;
         _this._nNoteIndex = 0;
         _this.addEventListener(egret.Event.ADDED_TO_STAGE, _this.onAddToStage, _this);
         return _this;
@@ -31,8 +31,9 @@ var GamePanel = (function (_super) {
         this._channelGame = this._soundGame.play(0, 1);
         this._channelGame.addEventListener(egret.Event.SOUND_COMPLETE, this.onGameSoundComplete, this);
         //启动计时器
-        this._timer.addEventListener(egret.TimerEvent.TIMER, this.timerFunc, this);
-        this._timer.start();
+        this._nGameTime = 0;
+        this._nTimeFlag = egret.getTimer();
+        egret.startTick(this.timerFunc, this);
     };
     GamePanel.prototype.onRemoveFromStage = function (event) {
         this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
@@ -44,8 +45,8 @@ var GamePanel = (function (_super) {
     /**
      * 计时器回调
      */
-    GamePanel.prototype.timerFunc = function (event) {
-        this._nGameTime += GamePanel.INTERVAL_TIME;
+    GamePanel.prototype.timerFunc = function (curTime) {
+        this._nGameTime = (curTime - this._nTimeFlag);
         var arrBorn = ConfigManager.getInstance()._arrBorn;
         var nTime;
         var nPathWay;
@@ -60,8 +61,9 @@ var GamePanel = (function (_super) {
             note.y = -note.height;
             this.addChild(note);
             console.log("开始", this._nGameTime);
-            egret.Tween.get(note).to({ y: this.stage.stageHeight }, 1666).call(this.removeNote, this, [note]);
+            egret.Tween.get(note).to({ y: this.stage.stageHeight }, 1000).call(this.removeNote, this, [note]);
         }
+        return false;
     };
     GamePanel.prototype.removeNote = function (note) {
         if (note && note.parent) {
@@ -79,10 +81,7 @@ var GamePanel = (function (_super) {
             this._channelGame.stop();
             this._channelGame = null;
         }
-        if (this._timer) {
-            this._timer.removeEventListener(egret.TimerEvent.TIMER, this.timerFunc, this);
-            this._timer.stop();
-        }
+        egret.stopTick(this.timerFunc, this);
     };
     /**
      * 绘制音符飞行轨道和返回按钮
@@ -144,12 +143,9 @@ var GamePanel = (function (_super) {
             this._channelGame.stop();
             this._channelGame = null;
         }
-        if (this._timer) {
-            this._timer.removeEventListener(egret.TimerEvent.TIMER, this.timerFunc, this);
-            this._timer.stop();
-        }
         this._nGameTime = 0;
         this._nNoteIndex = 0;
+        egret.stopTick(this.timerFunc, this);
         NoteManager.getInstance().HideAllNote();
     };
     //音符飞行时间，与配置表结合使用
