@@ -19,49 +19,37 @@ var StartPanel = (function (_super) {
         return _this;
     }
     StartPanel.prototype.onAddToStage = function (event) {
-        this.drawStartBg();
         this.removeEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
         this.addEventListener(egret.Event.REMOVED_FROM_STAGE, this.onRemoveFromStage, this);
+        this.UpdateShow();
     };
     StartPanel.prototype.onRemoveFromStage = function (event) {
-        this._shapeStart.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTouch, this);
-        this._shapeStart.removeEventListener(egret.TouchEvent.TOUCH_END, this.onTouch, this);
         this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
         this.removeEventListener(egret.Event.REMOVED_FROM_STAGE, this.onRemoveFromStage, this);
+        this._channelGame.stop();
     };
-    StartPanel.prototype.drawStartBg = function () {
-        this._shapeBg = new egret.Shape();
-        this._shapeBg.graphics.beginFill(0xc1ffc1);
-        this._shapeBg.graphics.drawRect(0, 0, this.stage.stageWidth, this.stage.stageHeight);
-        this._shapeBg.graphics.endFill();
-        this.addChild(this._shapeBg);
-        this._shapeStart = new egret.Shape();
-        this._shapeStart.graphics.beginFill(0x76ee00);
-        this._shapeStart.graphics.drawRect((this.stage.stageWidth - 280) / 2, (this.stage.stageHeight - 80) / 2, 280, 80);
-        this._shapeStart.graphics.endFill();
-        this._shapeStart.touchEnabled = true;
-        this._shapeStart.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTouch, this);
-        this._shapeStart.addEventListener(egret.TouchEvent.TOUCH_END, this.onTouch, this);
-        this.addChild(this._shapeStart);
-        this._labelStart = new eui.Label();
-        this._labelStart.text = "START";
-        this._labelStart.textColor = 0x218868;
-        this._labelStart.size = 60;
-        this._labelStart.x = (this.stage.stageWidth - this._labelStart.width) / 2;
-        this._labelStart.y = (this.stage.stageHeight - this._labelStart.height) / 2;
-        this._labelStart.touchEnabled = false;
-        this.addChild(this._labelStart);
+    StartPanel.prototype.UpdateShow = function () {
+        if (!this._bmpBg) {
+            this._bmpBg = new egret.Bitmap();
+        }
+        var texture = RES.getRes("image_startBg_jpg");
+        this._bmpBg.texture = texture;
+        this.addChild(this._bmpBg);
+        if (!this._btnStart) {
+            this._btnStart = new MyButton();
+        }
+        this._btnStart.SetResource("image_start1_png", "image_start2_png", this.onTouch);
+        this._btnStart.x = this.stage.stageWidth / 16;
+        this._btnStart.y = this.stage.height / 2;
+        this.addChild(this._btnStart);
+        //载入游戏音乐
+        if (!this._soundGame) {
+            this._soundGame = RES.getRes("sound_start_mp3");
+        }
+        this._channelGame = this._soundGame.play();
     };
     StartPanel.prototype.onTouch = function (event) {
-        switch (event.type) {
-            case egret.TouchEvent.TOUCH_BEGIN:
-                break;
-            case egret.TouchEvent.TOUCH_END:
-                EventManager.getInstance().dispatchEvent(new DataEvent(DataEvent.EVENT_SHOW_GAME));
-                break;
-            default:
-                break;
-        }
+        EventManager.getInstance().dispatchEvent(new DataEvent(DataEvent.EVENT_SHOW_GAME));
     };
     return StartPanel;
 }(egret.DisplayObjectContainer));

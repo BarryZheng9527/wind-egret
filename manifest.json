@@ -10,6 +10,8 @@
 	],
 	"game": [
 		"bin-debug/Main.js",
+		"bin-debug/common/GameConst.js",
+		"bin-debug/common/MyButton.js",
 		"bin-debug/config/ConfigManager.js",
 		"bin-debug/event/DataEvent.js",
 		"bin-debug/event/EventManager.js",

@@ -16,12 +16,10 @@ var NoteItem = (function (_super) {
     function NoteItem() {
         var _this = _super.call(this) || this;
         _this.addEventListener(egret.Event.ADDED_TO_STAGE, _this.onAddToStage, _this);
-        _this._shapeNote = new egret.Shape();
         return _this;
     }
     NoteItem.prototype.onAddToStage = function (event) {
-        this.DrawNote();
-        this.addChild(this._shapeNote);
+        this.AddNote();
         this.removeEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
         this.addEventListener(egret.Event.REMOVED_FROM_STAGE, this.onRemoveFromStage, this);
     };
@@ -39,25 +37,65 @@ var NoteItem = (function (_super) {
         this._nKey = nTime * 100 + nPathWay * 10 + nType * 1;
         this._nType = nPathWay * 10 + nType * 1;
     };
-    NoteItem.prototype.DrawNote = function () {
-        var nType = this._nType % 10;
-        this._shapeNote.graphics.clear();
-        if (nType == 0) {
-            this._shapeNote.graphics.beginFill(0x00f5ff);
+    NoteItem.prototype.AddNote = function () {
+        if (!this._bmpNote) {
+            this._bmpNote = new egret.Bitmap();
         }
-        else {
-            this._shapeNote.graphics.beginFill(0x00ff7f);
+        var texture;
+        switch (this._nType) {
+            case 10:
+                texture = RES.getRes("image_keyStart11_png");
+                break;
+            case 11:
+                texture = RES.getRes("image_keyStart12_png");
+                break;
+            case 12:
+                texture = RES.getRes("image_keyMiddle1_png");
+                break;
+            case 13:
+                texture = RES.getRes("image_keyend1_png");
+                break;
+            case 20:
+                texture = RES.getRes("image_keyStart21_png");
+                break;
+            case 21:
+                texture = RES.getRes("image_keyStart22_png");
+                break;
+            case 22:
+                texture = RES.getRes("image_keyMiddle2_png");
+                break;
+            case 23:
+                texture = RES.getRes("image_keyend2_png");
+                break;
+            case 30:
+                texture = RES.getRes("image_keyStart31_png");
+                break;
+            case 31:
+                texture = RES.getRes("image_keyStart32_png");
+                break;
+            case 32:
+                texture = RES.getRes("image_keyMiddle3_png");
+                break;
+            case 33:
+                texture = RES.getRes("image_keyend3_png");
+                break;
+            case 40:
+                texture = RES.getRes("image_keyStart41_png");
+                break;
+            case 41:
+                texture = RES.getRes("image_keyStart24_png");
+                break;
+            case 42:
+                texture = RES.getRes("image_keyMiddle4_png");
+                break;
+            case 43:
+                texture = RES.getRes("image_keyend4_png");
+                break;
+            default:
+                break;
         }
-        if (nType == 0 || nType == 1) {
-            this._shapeNote.graphics.drawRect(0, 0, this.stage.stageWidth / 8, this.stage.stageHeight / 8);
-        }
-        else if (nType == 2) {
-            this._shapeNote.graphics.drawRect(0, 0, this.stage.stageWidth / 32, this.stage.stageHeight / 8);
-        }
-        else if (nType == 3) {
-            this._shapeNote.graphics.drawRect(0, 0, this.stage.stageWidth / 16, this.stage.stageHeight / 8);
-        }
-        this._shapeNote.graphics.endFill();
+        this._bmpNote.texture = texture;
+        this.addChild(this._bmpNote);
     };
     return NoteItem;
 }(egret.DisplayObjectContainer));

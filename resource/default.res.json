@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "config_born_json,sound_game_mp3",
+			"keys": "config_born_json,sound_game_mp3,image_startBg_jpg,image_start1_png,image_start2_png,image_keyend1_png,image_keyend2_png,image_keyend3_png,image_keyend4_png,image_keyMiddle1_png,image_keyMiddle3_png,image_keyMiddle4_png,image_keyStart12_png,image_keyStart22_png,image_keyStart11_png,image_keyMiddle2_png,image_keyStart31_png,image_keyStart41_png,image_keyStart32_png,image_keyStart42_png,image_keyStart21_png,sound_start_mp3,image_gameBg_jpg,image_gameNightBg_jpg,image_return_png,image_perBg_png",
 			"name": "preload"
 		}
 	],
@@ -12,9 +12,129 @@
 			"name": "config_born_json"
 		},
 		{
-			"name": "sound_game_mp3",
+			"url": "sound/sound_game.mp3",
 			"type": "sound",
-			"url": "sound/sound_game.mp3"
+			"name": "sound_game_mp3"
+		},
+		{
+			"url": "image/image_startBg.jpg",
+			"type": "image",
+			"name": "image_startBg_jpg"
+		},
+		{
+			"name": "image_start1_png",
+			"type": "image",
+			"url": "image/image_start1.png"
+		},
+		{
+			"name": "image_start2_png",
+			"type": "image",
+			"url": "image/image_start2.png"
+		},
+		{
+			"name": "image_keyend1_png",
+			"type": "image",
+			"url": "image/image_keyend1.png"
+		},
+		{
+			"name": "image_keyend2_png",
+			"type": "image",
+			"url": "image/image_keyend2.png"
+		},
+		{
+			"name": "image_keyend3_png",
+			"type": "image",
+			"url": "image/image_keyend3.png"
+		},
+		{
+			"name": "image_keyend4_png",
+			"type": "image",
+			"url": "image/image_keyend4.png"
+		},
+		{
+			"name": "image_keyMiddle1_png",
+			"type": "image",
+			"url": "image/image_keyMiddle1.png"
+		},
+		{
+			"name": "image_keyMiddle3_png",
+			"type": "image",
+			"url": "image/image_keyMiddle3.png"
+		},
+		{
+			"name": "image_keyMiddle4_png",
+			"type": "image",
+			"url": "image/image_keyMiddle4.png"
+		},
+		{
+			"name": "image_keyStart12_png",
+			"type": "image",
+			"url": "image/image_keyStart12.png"
+		},
+		{
+			"name": "image_keyStart22_png",
+			"type": "image",
+			"url": "image/image_keyStart22.png"
+		},
+		{
+			"name": "image_keyStart11_png",
+			"type": "image",
+			"url": "image/image_keyStart11.png"
+		},
+		{
+			"name": "image_keyMiddle2_png",
+			"type": "image",
+			"url": "image/image_keyMiddle2.png"
+		},
+		{
+			"name": "image_keyStart31_png",
+			"type": "image",
+			"url": "image/image_keyStart31.png"
+		},
+		{
+			"name": "image_keyStart41_png",
+			"type": "image",
+			"url": "image/image_keyStart41.png"
+		},
+		{
+			"name": "image_keyStart32_png",
+			"type": "image",
+			"url": "image/image_keyStart32.png"
+		},
+		{
+			"name": "image_keyStart42_png",
+			"type": "image",
+			"url": "image/image_keyStart42.png"
+		},
+		{
+			"name": "image_keyStart21_png",
+			"type": "image",
+			"url": "image/image_keyStart21.png"
+		},
+		{
+			"name": "sound_start_mp3",
+			"type": "sound",
+			"url": "sound/sound_start.mp3"
+		},
+		{
+			"name": "image_gameBg_jpg",
+			"type": "image",
+			"url": "image/image_gameBg.jpg"
+		},
+		{
+			"name": "image_gameNightBg_jpg",
+			"type": "image",
+			"url": "image/image_gameNightBg.jpg"
+		},
+		{
+			"name": "image_return_png",
+			"type": "image",
+			"url": "image/image_return.png"
+		},
+		{
+			"name": "image_perBg_png",
+			"type": "image",
+			"url": "image/image_perBg.png"
 		}
 	]
 }

@@ -1,17 +1,11 @@
 class GamePanel extends egret.DisplayObjectContainer
 {
-    //音符飞行时间，与配置表结合使用
-    public static NOTE_FLY_TIME:number = 1;
-    //计时间隔，毫秒
-    public static INTERVAL_TIME:number = 10;
-
-    //音符轨道
-    private _pathWayBg1:egret.Shape;
-    private _pathWayBg2:egret.Shape;
-    private _pathWayBg3:egret.Shape;
-    private _pathWayBg4:egret.Shape;
-    private _shapeReturn:egret.Shape;
-    private _labelReturn:eui.Label;
+    //背景图
+    private _bmpBg:egret.Bitmap;
+    private _bmpNigthBg:egret.Bitmap;
+    private _bmpPerBg:egret.Bitmap;
+    //返回按钮
+    private _btnReturn:MyButton;
     //背景音乐
     private _soundGame:egret.Sound;
     private _channelGame:egret.SoundChannel;
@@ -26,9 +20,6 @@ class GamePanel extends egret.DisplayObjectContainer
         super();
 
         this._soundGame = RES.getRes("sound_game_mp3");
-        this._nGameTime = 0;
-        this._nTimeFlag = 0;
-        this._nNoteIndex = 0;
 
         this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
     }
@@ -38,25 +29,73 @@ class GamePanel extends egret.DisplayObjectContainer
         this.removeEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
         this.addEventListener(egret.Event.REMOVED_FROM_STAGE, this.onRemoveFromStage, this);
 
-        //绘制音符飞行轨道和返回按钮
-        this.drawPathWayBg();
-        //载入游戏音乐
-        this._channelGame = this._soundGame.play(0, 1);
-        this._channelGame.addEventListener(egret.Event.SOUND_COMPLETE, this.onGameSoundComplete, this);
-        //启动计时器
-        this._nGameTime = 0;
-        this._nTimeFlag = egret.getTimer();
-        egret.startTick(this.timerFunc, this);
+        this.Init();
+        this.UpdateShow();
     }
 
     private onRemoveFromStage(event:egret.Event)
     {
         this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
         this.removeEventListener(egret.Event.REMOVED_FROM_STAGE, this.onRemoveFromStage, this);
-        this._shapeReturn.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onReturnTouch, this);
-        this._shapeReturn.removeEventListener(egret.TouchEvent.TOUCH_END, this.onReturnTouch, this);
 
         this.clearScene();
+    }
+
+    /**
+     * 显示数据初始化
+     */
+    private Init():void
+    {
+        this._nGameTime = 0;
+        this._nTimeFlag = 0;
+        this._nNoteIndex = 0;
+    }
+
+    /**
+     * 更新显示
+     */
+    private UpdateShow():void
+    {
+        if (!this._bmpBg)
+        {
+            this._bmpBg = new egret.Bitmap();
+        }
+        var texture:egret.Texture = RES.getRes("image_gameBg_jpg");
+        this._bmpBg.texture = texture;
+        this.addChild(this._bmpBg);
+        if (!this._bmpNigthBg)
+        {
+            this._bmpNigthBg = new egret.Bitmap();
+        }
+        var texture1:egret.Texture = RES.getRes("image_gameNightBg_jpg");
+        this._bmpNigthBg.texture = texture1;
+        this.addChild(this._bmpNigthBg);
+        this._bmpNigthBg.visible = false;
+        if (!this._bmpPerBg)
+        {
+            this._bmpPerBg = new egret.Bitmap();
+        }
+        var texture2:egret.Texture = RES.getRes("image_perBg_png");
+        this._bmpPerBg.texture = texture2;
+        this._bmpPerBg.y = this.stage.height - 543;
+        this.addChild(this._bmpPerBg);
+        if (!this._btnReturn)
+        {
+            this._btnReturn = new MyButton();
+        }
+        this._btnReturn.SetResource("image_return_png", "image_return_png", this.onReturnTouch);
+        this._btnReturn.x = this.stage.stageWidth - this._btnReturn.width;
+        this.addChild(this._btnReturn);
+        //载入游戏音乐
+        if (!this._soundGame)
+        {
+            this._soundGame = RES.getRes("sound_start_mp3");
+        }
+        this._channelGame = this._soundGame.play(0, 1);
+        this._channelGame.addEventListener(egret.Event.SOUND_COMPLETE, this.onGameSoundComplete, this);
+        //启动计时器
+        this._nTimeFlag = egret.getTimer();
+        egret.startTick(this.timerFunc, this);
     }
 
     /**
@@ -79,7 +118,6 @@ class GamePanel extends egret.DisplayObjectContainer
             note.x = this.stage.stageWidth * (nPathWay * 4 - 3) / 16;
             note.y = -note.height;
             this.addChild(note);
-            console.log("开始",this._nGameTime);
             egret.Tween.get(note).to({y:this.stage.stageHeight}, 1000).call(this.removeNote, this, [note]);
         }
         return false;
@@ -92,7 +130,6 @@ class GamePanel extends egret.DisplayObjectContainer
             note.parent.removeChild(note);
         }
         NoteManager.getInstance().HideNote(note);
-        console.log("结束",this._nGameTime);
     }
 
     /**
@@ -110,61 +147,11 @@ class GamePanel extends egret.DisplayObjectContainer
     }
 
     /**
-     * 绘制音符飞行轨道和返回按钮
+     * 返回主界面
      */
-    private drawPathWayBg():void
-    {
-        this._pathWayBg1 = new egret.Shape();
-        this._pathWayBg1.graphics.beginFill(0xdedede);
-        this._pathWayBg1.graphics.drawRect(0, 0, this.stage.stageWidth/4, this.stage.stageHeight);
-        this._pathWayBg1.graphics.endFill();
-        this.addChild(this._pathWayBg1);
-        this._pathWayBg2 = new egret.Shape();
-        this._pathWayBg2.graphics.beginFill(0xeee685);
-        this._pathWayBg2.graphics.drawRect(this.stage.stageWidth/4, 0, this.stage.stageWidth/4, this.stage.stageHeight);
-        this._pathWayBg2.graphics.endFill();
-        this.addChild(this._pathWayBg2);
-        this._pathWayBg3 = new egret.Shape();
-        this._pathWayBg3.graphics.beginFill(0xb4eeb4);
-        this._pathWayBg3.graphics.drawRect(this.stage.stageWidth/2, 0, this.stage.stageWidth/4, this.stage.stageHeight);
-        this._pathWayBg3.graphics.endFill();
-        this.addChild(this._pathWayBg3);
-        this._pathWayBg4 = new egret.Shape();
-        this._pathWayBg4.graphics.beginFill(0xdedede);
-        this._pathWayBg4.graphics.drawRect(this.stage.stageWidth*3/4, 0, this.stage.stageWidth/4, this.stage.stageHeight);
-        this._pathWayBg4.graphics.endFill();
-        this.addChild(this._pathWayBg4);
-
-        this._shapeReturn = new egret.Shape();
-        this._shapeReturn.graphics.beginFill(0x2f4f4f);
-        this._shapeReturn.graphics.drawRect(this.stage.stageWidth - 300, 20, 280, 60);
-        this._shapeReturn.graphics.endFill();
-        this._shapeReturn.touchEnabled = true;
-        this._shapeReturn.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onReturnTouch, this);
-        this._shapeReturn.addEventListener(egret.TouchEvent.TOUCH_END, this.onReturnTouch, this);
-        this.addChild(this._shapeReturn);
-
-        this._labelReturn = new eui.Label();
-        this._labelReturn.text = "RETURN";
-        this._labelReturn.size = 50;
-        this._labelReturn.x = this.stage.stageWidth - 300 + (this._shapeReturn.width - this._labelReturn.width)/2;
-        this._labelReturn.y = 20 + (this._shapeReturn.height - this._labelReturn.height)/2;
-        this._labelReturn.touchEnabled = false;
-        this.addChild(this._labelReturn);
-    }
-
     private onReturnTouch(event:egret.TouchEvent) 
     {
-        switch (event.type)
-        {
-            case egret.TouchEvent.TOUCH_BEGIN:
-                break;
-            case egret.TouchEvent.TOUCH_END:
-                EventManager.getInstance().dispatchEvent(new egret.Event(DataEvent.EVENT_SHOW_START));
-                break;
-            default:
-                break;
-        }
+        EventManager.getInstance().dispatchEvent(new egret.Event(DataEvent.EVENT_SHOW_START));
     }
 
     /**
@@ -172,14 +159,15 @@ class GamePanel extends egret.DisplayObjectContainer
      */
     private clearScene():void
     {
+        this._nGameTime = 0;
+        this._nNoteIndex = 0;
+
         if (this._channelGame)
         {
             this._channelGame.removeEventListener(egret.Event.SOUND_COMPLETE, this.onGameSoundComplete, this);
             this._channelGame.stop();
             this._channelGame = null;
         }
-        this._nGameTime = 0;
-        this._nNoteIndex = 0;
         egret.stopTick(this.timerFunc, this);
         NoteManager.getInstance().HideAllNote();
     }
