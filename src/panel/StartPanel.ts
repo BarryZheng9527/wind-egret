@@ -27,7 +27,7 @@ class StartPanel extends egret.DisplayObjectContainer
         this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
         this.removeEventListener(egret.Event.REMOVED_FROM_STAGE, this.onRemoveFromStage, this);
 
-        this._channelGame.stop();
+        this.Clear();
     }
 
     private UpdateShow():void
@@ -58,5 +58,15 @@ class StartPanel extends egret.DisplayObjectContainer
     private onTouch(event:egret.TouchEvent) 
     {
         EventManager.getInstance().dispatchEvent(new DataEvent(DataEvent.EVENT_SHOW_GAME));
+    }
+
+    private Clear():void
+    {
+        this._channelGame.stop();
+
+        this._bmpBg = null;
+        this._btnStart = null;
+        this._soundGame = null;
+        this._channelGame = null;
     }
 }

@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "config_born_json,sound_game_mp3,image_startBg_jpg,image_start1_png,image_start2_png,image_keyend1_png,image_keyend2_png,image_keyend3_png,image_keyend4_png,image_keyMiddle1_png,image_keyMiddle3_png,image_keyMiddle4_png,image_keyStart12_png,image_keyStart22_png,image_keyStart11_png,image_keyMiddle2_png,image_keyStart31_png,image_keyStart41_png,image_keyStart32_png,image_keyStart42_png,image_keyStart21_png,sound_start_mp3,image_gameBg_jpg,image_gameNightBg_jpg,image_return_png,image_perBg_png",
+			"keys": "config_born_json,sound_game_mp3,image_startBg_jpg,image_start1_png,image_start2_png,image_keyend1_png,image_keyend2_png,image_keyend3_png,image_keyend4_png,image_keyMiddle1_png,image_keyMiddle3_png,image_keyMiddle4_png,image_keyStart12_png,image_keyStart22_png,image_keyStart11_png,image_keyMiddle2_png,image_keyStart31_png,image_keyStart41_png,image_keyStart32_png,image_keyStart42_png,image_keyStart21_png,sound_start_mp3,image_gameBg_jpg,image_return_png,image_perBg_png,movie_start1_json,movie_start9_png,movie_start8_png,movie_start7_png,movie_start8_json,movie_start9_json,movie_start6_png,movie_start5_png,movie_start4_png,movie_start3_png,movie_start4_json,movie_start5_json,movie_start7_json,movie_start3_json,movie_start6_json,movie_start2_json,movie_start10_json,movie_start10_png,movie_start2_png,movie_start1_png",
 			"name": "preload"
 		}
 	],
@@ -122,11 +122,6 @@
 			"url": "image/image_gameBg.jpg"
 		},
 		{
-			"name": "image_gameNightBg_jpg",
-			"type": "image",
-			"url": "image/image_gameNightBg.jpg"
-		},
-		{
 			"name": "image_return_png",
 			"type": "image",
 			"url": "image/image_return.png"
@@ -135,6 +130,106 @@
 			"name": "image_perBg_png",
 			"type": "image",
 			"url": "image/image_perBg.png"
+		},
+		{
+			"name": "movie_start1_json",
+			"type": "json",
+			"url": "movie/movie_start1.json"
+		},
+		{
+			"name": "movie_start9_png",
+			"type": "image",
+			"url": "movie/movie_start9.png"
+		},
+		{
+			"name": "movie_start8_png",
+			"type": "image",
+			"url": "movie/movie_start8.png"
+		},
+		{
+			"name": "movie_start7_png",
+			"type": "image",
+			"url": "movie/movie_start7.png"
+		},
+		{
+			"name": "movie_start8_json",
+			"type": "json",
+			"url": "movie/movie_start8.json"
+		},
+		{
+			"name": "movie_start9_json",
+			"type": "json",
+			"url": "movie/movie_start9.json"
+		},
+		{
+			"name": "movie_start6_png",
+			"type": "image",
+			"url": "movie/movie_start6.png"
+		},
+		{
+			"name": "movie_start5_png",
+			"type": "image",
+			"url": "movie/movie_start5.png"
+		},
+		{
+			"name": "movie_start4_png",
+			"type": "image",
+			"url": "movie/movie_start4.png"
+		},
+		{
+			"name": "movie_start3_png",
+			"type": "image",
+			"url": "movie/movie_start3.png"
+		},
+		{
+			"name": "movie_start4_json",
+			"type": "json",
+			"url": "movie/movie_start4.json"
+		},
+		{
+			"name": "movie_start5_json",
+			"type": "json",
+			"url": "movie/movie_start5.json"
+		},
+		{
+			"name": "movie_start7_json",
+			"type": "json",
+			"url": "movie/movie_start7.json"
+		},
+		{
+			"name": "movie_start3_json",
+			"type": "json",
+			"url": "movie/movie_start3.json"
+		},
+		{
+			"name": "movie_start6_json",
+			"type": "json",
+			"url": "movie/movie_start6.json"
+		},
+		{
+			"name": "movie_start2_json",
+			"type": "json",
+			"url": "movie/movie_start2.json"
+		},
+		{
+			"name": "movie_start10_json",
+			"type": "json",
+			"url": "movie/movie_start10.json"
+		},
+		{
+			"name": "movie_start10_png",
+			"type": "image",
+			"url": "movie/movie_start10.png"
+		},
+		{
+			"name": "movie_start2_png",
+			"type": "image",
+			"url": "movie/movie_start2.png"
+		},
+		{
+			"name": "movie_start1_png",
+			"type": "image",
+			"url": "movie/movie_start1.png"
 		}
 	]
 }

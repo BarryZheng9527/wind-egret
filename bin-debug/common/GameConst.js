@@ -4,7 +4,7 @@ var __reflect = (this && this.__reflect) || function (p, c, t) {
 var GameConst = (function () {
     function GameConst() {
     }
-    GameConst.NOTE_FLY_TIME = 1; //音符飞行时间，与配置表结合使用
+    GameConst.NOTE_FLY_TIME = 1000; //音符飞行时间（毫秒），与配置表结合使用
     return GameConst;
 }());
 __reflect(GameConst.prototype, "GameConst");

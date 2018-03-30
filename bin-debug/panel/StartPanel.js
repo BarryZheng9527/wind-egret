@@ -26,7 +26,7 @@ var StartPanel = (function (_super) {
     StartPanel.prototype.onRemoveFromStage = function (event) {
         this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
         this.removeEventListener(egret.Event.REMOVED_FROM_STAGE, this.onRemoveFromStage, this);
-        this._channelGame.stop();
+        this.Clear();
     };
     StartPanel.prototype.UpdateShow = function () {
         if (!this._bmpBg) {
@@ -50,6 +50,13 @@ var StartPanel = (function (_super) {
     };
     StartPanel.prototype.onTouch = function (event) {
         EventManager.getInstance().dispatchEvent(new DataEvent(DataEvent.EVENT_SHOW_GAME));
+    };
+    StartPanel.prototype.Clear = function () {
+        this._channelGame.stop();
+        this._bmpBg = null;
+        this._btnStart = null;
+        this._soundGame = null;
+        this._channelGame = null;
     };
     return StartPanel;
 }(egret.DisplayObjectContainer));

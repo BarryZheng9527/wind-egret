@@ -15,25 +15,24 @@ var GamePanel = (function (_super) {
     __extends(GamePanel, _super);
     function GamePanel() {
         var _this = _super.call(this) || this;
-        _this._soundGame = RES.getRes("sound_game_mp3");
         _this.addEventListener(egret.Event.ADDED_TO_STAGE, _this.onAddToStage, _this);
         return _this;
     }
     GamePanel.prototype.onAddToStage = function (event) {
         this.removeEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
         this.addEventListener(egret.Event.REMOVED_FROM_STAGE, this.onRemoveFromStage, this);
-        this.Init();
+        this.InitData();
         this.UpdateShow();
     };
     GamePanel.prototype.onRemoveFromStage = function (event) {
         this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
         this.removeEventListener(egret.Event.REMOVED_FROM_STAGE, this.onRemoveFromStage, this);
-        this.clearScene();
+        this.Clear();
     };
     /**
      * 显示数据初始化
      */
-    GamePanel.prototype.Init = function () {
+    GamePanel.prototype.InitData = function () {
         this._nGameTime = 0;
         this._nTimeFlag = 0;
         this._nNoteIndex = 0;
@@ -70,7 +69,7 @@ var GamePanel = (function (_super) {
         this.addChild(this._btnReturn);
         //载入游戏音乐
         if (!this._soundGame) {
-            this._soundGame = RES.getRes("sound_start_mp3");
+            this._soundGame = RES.getRes("sound_game_mp3");
         }
         this._channelGame = this._soundGame.play(0, 1);
         this._channelGame.addEventListener(egret.Event.SOUND_COMPLETE, this.onGameSoundComplete, this);
@@ -93,10 +92,24 @@ var GamePanel = (function (_super) {
             nType = arrBorn[this._nNoteIndex].type;
             this._nNoteIndex++;
             var note = NoteManager.getInstance().GetNote(nTime, nPathWay, nType);
-            note.x = this.stage.stageWidth * (nPathWay * 4 - 3) / 16;
-            note.y = -note.height;
+            note.scaleX = note.scaleY = 0.01;
+            note.x = this.stage.stageWidth * 19 / 48 + this.stage.stageWidth * nPathWay / 24;
+            note.y = this.stage.stageHeight * 27 / 128;
+            var nTargetX;
+            if (nPathWay == 1) {
+                nTargetX = this.stage.stageWidth * 17 / 192 - 114;
+            }
+            else if (nPathWay == 2) {
+                nTargetX = this.stage.stageWidth * 23 / 64 - 114;
+            }
+            else if (nPathWay == 3) {
+                nTargetX = this.stage.stageWidth * 41 / 64 - 114;
+            }
+            else if (nPathWay == 4) {
+                nTargetX = this.stage.stageWidth * 175 / 192 - 114;
+            }
             this.addChild(note);
-            egret.Tween.get(note).to({ y: this.stage.stageHeight }, 1000).call(this.removeNote, this, [note]);
+            egret.Tween.get(note).to({ x: nTargetX, y: this.stage.stageHeight - 42, scaleX: 1, scaleY: 1 }, GameConst.NOTE_FLY_TIME, egret.Ease.sineIn).call(this.removeNote, this, [note]);
         }
         return false;
     };
@@ -109,7 +122,7 @@ var GamePanel = (function (_super) {
     /**
      * 音乐播放完毕
      */
-    GamePanel.prototype.onGameSoundComplete = function (e) {
+    GamePanel.prototype.onGameSoundComplete = function (event) {
         if (this._channelGame) {
             this._channelGame.removeEventListener(egret.Event.SOUND_COMPLETE, this.onGameSoundComplete, this);
             this._channelGame.stop();
@@ -126,9 +139,7 @@ var GamePanel = (function (_super) {
     /**
      * 场景清理
      */
-    GamePanel.prototype.clearScene = function () {
-        this._nGameTime = 0;
-        this._nNoteIndex = 0;
+    GamePanel.prototype.Clear = function () {
         if (this._channelGame) {
             this._channelGame.removeEventListener(egret.Event.SOUND_COMPLETE, this.onGameSoundComplete, this);
             this._channelGame.stop();
@@ -136,6 +147,13 @@ var GamePanel = (function (_super) {
         }
         egret.stopTick(this.timerFunc, this);
         NoteManager.getInstance().HideAllNote();
+        this._bmpBg = null;
+        this._bmpNigthBg = null;
+        this._bmpPerBg = null;
+        this._btnReturn = null;
+        this._soundGame = null;
+        this._nGameTime = 0;
+        this._nNoteIndex = 0;
     };
     return GamePanel;
 }(egret.DisplayObjectContainer));
