@@ -26,6 +26,7 @@ var NoteItem = (function (_super) {
     NoteItem.prototype.onRemoveFromStage = function (event) {
         this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
         this.removeEventListener(egret.Event.REMOVED_FROM_STAGE, this.onRemoveFromStage, this);
+        this.Clear();
     };
     /**
      * 设置音符类型
@@ -83,7 +84,7 @@ var NoteItem = (function (_super) {
                 texture = RES.getRes("image_keyStart41_png");
                 break;
             case 41:
-                texture = RES.getRes("image_keyStart24_png");
+                texture = RES.getRes("image_keyStart42_png");
                 break;
             case 42:
                 texture = RES.getRes("image_keyMiddle4_png");
@@ -96,6 +97,9 @@ var NoteItem = (function (_super) {
         }
         this._bmpNote.texture = texture;
         this.addChild(this._bmpNote);
+    };
+    NoteItem.prototype.Clear = function () {
+        this._bmpNote = null;
     };
     return NoteItem;
 }(egret.DisplayObjectContainer));

@@ -34,24 +34,25 @@ var MyButton = (function (_super) {
         this.removeEventListener(egret.TouchEvent.TOUCH_END, this.onTouch, this);
         this.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
         this.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.onTouchTap, this);
+        this.Clear();
     };
     MyButton.prototype.SetResource = function (szUPName, szDownName, func) {
-        if (!this._btnBg) {
-            this._btnBg = new egret.Bitmap();
+        if (!this._bmpBg) {
+            this._bmpBg = new egret.Bitmap();
         }
         this._textureUp = RES.getRes(szUPName);
         this._textureDown = RES.getRes(szDownName);
         this._listener = func;
-        this._btnBg.texture = this._textureUp;
-        this.addChild(this._btnBg);
+        this._bmpBg.texture = this._textureUp;
+        this.addChild(this._bmpBg);
     };
     MyButton.prototype.onTouch = function (event) {
         switch (event.type) {
             case egret.TouchEvent.TOUCH_BEGIN:
-                this._btnBg.texture = this._textureDown;
+                this._bmpBg.texture = this._textureDown;
                 break;
             case egret.TouchEvent.TOUCH_END:
-                this._btnBg.texture = this._textureUp;
+                this._bmpBg.texture = this._textureUp;
                 break;
             default:
                 break;
@@ -59,14 +60,20 @@ var MyButton = (function (_super) {
     };
     MyButton.prototype.onTouchMove = function (event) {
         if (event.localX > 20 && event.localX < 243 && event.localY > 20 && event.localY < 71) {
-            this._btnBg.texture = this._textureDown;
+            this._bmpBg.texture = this._textureDown;
         }
         else {
-            this._btnBg.texture = this._textureUp;
+            this._bmpBg.texture = this._textureUp;
         }
     };
     MyButton.prototype.onTouchTap = function (event) {
         this._listener(event);
+    };
+    MyButton.prototype.Clear = function () {
+        this._bmpBg = null;
+        this._textureUp = null;
+        this._textureDown = null;
+        this._listener = null;
     };
     return MyButton;
 }(egret.DisplayObjectContainer));

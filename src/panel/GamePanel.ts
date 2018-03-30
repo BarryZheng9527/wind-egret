@@ -2,7 +2,6 @@ class GamePanel extends egret.DisplayObjectContainer
 {
     //背景图
     private _bmpBg:egret.Bitmap;
-    private _bmpNigthBg:egret.Bitmap;
     private _bmpPerBg:egret.Bitmap;
     //返回按钮
     private _btnReturn:MyButton;
@@ -18,9 +17,6 @@ class GamePanel extends egret.DisplayObjectContainer
     public constructor()
     {
         super();
-
-        this._soundGame = RES.getRes("sound_game_mp3");
-
         this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
     }
 
@@ -29,7 +25,7 @@ class GamePanel extends egret.DisplayObjectContainer
         this.removeEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
         this.addEventListener(egret.Event.REMOVED_FROM_STAGE, this.onRemoveFromStage, this);
 
-        this.Init();
+        this.InitData();
         this.UpdateShow();
     }
 
@@ -38,13 +34,13 @@ class GamePanel extends egret.DisplayObjectContainer
         this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
         this.removeEventListener(egret.Event.REMOVED_FROM_STAGE, this.onRemoveFromStage, this);
 
-        this.clearScene();
+        this.Clear();
     }
 
     /**
      * 显示数据初始化
      */
-    private Init():void
+    private InitData():void
     {
         this._nGameTime = 0;
         this._nTimeFlag = 0;
@@ -63,14 +59,6 @@ class GamePanel extends egret.DisplayObjectContainer
         var texture:egret.Texture = RES.getRes("image_gameBg_jpg");
         this._bmpBg.texture = texture;
         this.addChild(this._bmpBg);
-        if (!this._bmpNigthBg)
-        {
-            this._bmpNigthBg = new egret.Bitmap();
-        }
-        var texture1:egret.Texture = RES.getRes("image_gameNightBg_jpg");
-        this._bmpNigthBg.texture = texture1;
-        this.addChild(this._bmpNigthBg);
-        this._bmpNigthBg.visible = false;
         if (!this._bmpPerBg)
         {
             this._bmpPerBg = new egret.Bitmap();
@@ -89,7 +77,7 @@ class GamePanel extends egret.DisplayObjectContainer
         //载入游戏音乐
         if (!this._soundGame)
         {
-            this._soundGame = RES.getRes("sound_start_mp3");
+            this._soundGame = RES.getRes("sound_game_mp3");
         }
         this._channelGame = this._soundGame.play(0, 1);
         this._channelGame.addEventListener(egret.Event.SOUND_COMPLETE, this.onGameSoundComplete, this);
@@ -114,11 +102,30 @@ class GamePanel extends egret.DisplayObjectContainer
             nPathWay = arrBorn[this._nNoteIndex].track;
             nType = arrBorn[this._nNoteIndex].type;
             this._nNoteIndex ++;
+
             var note:NoteItem = NoteManager.getInstance().GetNote(nTime, nPathWay, nType);
-            note.x = this.stage.stageWidth * (nPathWay * 4 - 3) / 16;
-            note.y = -note.height;
+            note.scaleX = note.scaleY = 0.01;
+            note.x = this.stage.stageWidth * 19 / 48 + this.stage.stageWidth * nPathWay / 24;
+            note.y = this.stage.stageHeight * 27 / 128;
+            var nTargetX:number;
+            if (nPathWay == 1)
+            {
+                nTargetX = this.stage.stageWidth * 17 / 192 - 114;
+            }
+            else if (nPathWay == 2)
+            {
+                nTargetX = this.stage.stageWidth * 23 / 64 - 114;
+            }
+            else if (nPathWay == 3)
+            {
+                nTargetX = this.stage.stageWidth * 41 / 64 - 114;
+            }
+            else if (nPathWay == 4)
+            {
+                nTargetX = this.stage.stageWidth * 175 / 192 - 114;
+            }
             this.addChild(note);
-            egret.Tween.get(note).to({y:this.stage.stageHeight}, 1000).call(this.removeNote, this, [note]);
+            egret.Tween.get(note).to({x:nTargetX, y:this.stage.stageHeight - 42, scaleX:1, scaleY:1}, GameConst.NOTE_FLY_TIME, egret.Ease.sineIn).call(this.removeNote, this, [note]);
         }
         return false;
     }
@@ -135,7 +142,7 @@ class GamePanel extends egret.DisplayObjectContainer
     /**
      * 音乐播放完毕
      */
-    private onGameSoundComplete(e:egret.Event):void
+    private onGameSoundComplete(event:egret.Event):void
     {
         if (this._channelGame)
         {
@@ -157,11 +164,8 @@ class GamePanel extends egret.DisplayObjectContainer
     /**
      * 场景清理
      */
-    private clearScene():void
+    private Clear():void
     {
-        this._nGameTime = 0;
-        this._nNoteIndex = 0;
-
         if (this._channelGame)
         {
             this._channelGame.removeEventListener(egret.Event.SOUND_COMPLETE, this.onGameSoundComplete, this);
@@ -170,5 +174,11 @@ class GamePanel extends egret.DisplayObjectContainer
         }
         egret.stopTick(this.timerFunc, this);
         NoteManager.getInstance().HideAllNote();
+        this._bmpBg = null;
+        this._bmpPerBg = null;
+        this._btnReturn = null;
+        this._soundGame = null;
+        this._nGameTime = 0;
+        this._nNoteIndex = 0;
     }
 }

@@ -1,1 +1,1 @@
-{"version":3,"file":"GameConst.js","sourceRoot":"","sources":["../../src/common/GameConst.ts"],"names":[],"mappings":";;;AAAA;IAAA;IAGA,CAAC;IADiB,uBAAa,GAAU,CAAC,CAAC,CAAC,iBAAiB;IAC7D,gBAAC;CAAA,AAHD,IAGC;AAHK,UAAA,SAAS,wBAGd,CAAA"}
+{"version":3,"file":"GameConst.js","sourceRoot":"","sources":["../../src/common/GameConst.ts"],"names":[],"mappings":";;;AAAA;IAAA;IAGA,CAAC;IADiB,uBAAa,GAAU,IAAI,CAAC,CAAC,qBAAqB;IACpE,gBAAC;CAAA,AAHD,IAGC;AAHK,UAAA,SAAS,wBAGd,CAAA"}

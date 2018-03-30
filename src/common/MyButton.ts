@@ -1,6 +1,6 @@
 class MyButton extends egret.DisplayObjectContainer
 {
-    private _btnBg:egret.Bitmap;
+    private _bmpBg:egret.Bitmap;
     private _textureUp:egret.Texture;
     private _textureDown:egret.Texture;
     private _listener:Function;
@@ -32,19 +32,21 @@ class MyButton extends egret.DisplayObjectContainer
         this.removeEventListener(egret.TouchEvent.TOUCH_END, this.onTouch, this);
         this.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
         this.removeEventListener(egret.TouchEvent.TOUCH_TAP, this.onTouchTap, this);
+
+        this.Clear();
     }
 
     public SetResource(szUPName:string, szDownName:string, func:Function):void
     {
-        if (!this._btnBg)
+        if (!this._bmpBg)
         {
-            this._btnBg = new egret.Bitmap();
+            this._bmpBg = new egret.Bitmap();
         }
         this._textureUp = RES.getRes(szUPName);
         this._textureDown = RES.getRes(szDownName);
         this._listener = func;
-        this._btnBg.texture = this._textureUp;
-        this.addChild(this._btnBg);
+        this._bmpBg.texture = this._textureUp;
+        this.addChild(this._bmpBg);
     }
 
     private onTouch(event:egret.TouchEvent) 
@@ -52,10 +54,10 @@ class MyButton extends egret.DisplayObjectContainer
         switch (event.type)
         {
             case egret.TouchEvent.TOUCH_BEGIN:
-                this._btnBg.texture = this._textureDown;
+                this._bmpBg.texture = this._textureDown;
                 break;
             case egret.TouchEvent.TOUCH_END:
-                this._btnBg.texture = this._textureUp;
+                this._bmpBg.texture = this._textureUp;
                 break;
             default:
                 break;
@@ -66,16 +68,24 @@ class MyButton extends egret.DisplayObjectContainer
     {
         if (event.localX > 20 && event.localX < 243 && event.localY > 20 && event.localY < 71)
         {
-            this._btnBg.texture = this._textureDown;
+            this._bmpBg.texture = this._textureDown;
         }
         else
         {
-            this._btnBg.texture = this._textureUp;
+            this._bmpBg.texture = this._textureUp;
         }
     }
 
     private onTouchTap(event:egret.TouchEvent) 
     {
         this._listener(event);
+    }
+
+    private Clear():void
+    {
+        this._bmpBg = null;
+        this._textureUp = null;
+        this._textureDown = null;
+        this._listener = null;
     }
 }
