@@ -25,8 +25,6 @@ class NoteItem extends egret.DisplayObjectContainer
     {
         this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
         this.removeEventListener(egret.Event.REMOVED_FROM_STAGE, this.onRemoveFromStage, this);
-
-        this.Clear();
     }
 
     /**
@@ -90,7 +88,7 @@ class NoteItem extends egret.DisplayObjectContainer
                 texture = RES.getRes("image_keyStart41_png");
                 break;
             case 41:
-                texture = RES.getRes("image_keyStart42_png");
+                texture = RES.getRes("image_keyStart24_png");
                 break;
             case 42:
                 texture = RES.getRes("image_keyMiddle4_png");
@@ -103,10 +101,5 @@ class NoteItem extends egret.DisplayObjectContainer
         }
         this._bmpNote.texture = texture;
         this.addChild(this._bmpNote);
-    }
-
-    private Clear():void
-    {
-        this._bmpNote = null;
     }
 }
