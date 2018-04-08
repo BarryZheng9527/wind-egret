@@ -49,14 +49,16 @@ var StartPanel = (function (_super) {
         this._channelGame = this._soundGame.play();
     };
     StartPanel.prototype.onTouch = function (event) {
-        EventManager.getInstance().dispatchEvent(new DataEvent(DataEvent.EVENT_SHOW_GAME));
+        EventManager.getInstance().dispatchEvent(new DataEvent(DataEvent.EVENT_SHOW_START_MOVIE));
     };
     StartPanel.prototype.Clear = function () {
-        this._channelGame.stop();
+        if (this._channelGame) {
+            this._channelGame.stop();
+            this._channelGame = null;
+        }
         this._bmpBg = null;
         this._btnStart = null;
         this._soundGame = null;
-        this._channelGame = null;
     };
     return StartPanel;
 }(egret.DisplayObjectContainer));

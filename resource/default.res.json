@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "config_born_json,sound_game_mp3,image_startBg_jpg,image_start1_png,image_start2_png,image_keyend1_png,image_keyend2_png,image_keyend3_png,image_keyend4_png,image_keyMiddle1_png,image_keyMiddle3_png,image_keyMiddle4_png,image_keyStart12_png,image_keyStart22_png,image_keyStart11_png,image_keyMiddle2_png,image_keyStart31_png,image_keyStart41_png,image_keyStart32_png,image_keyStart42_png,image_keyStart21_png,sound_start_mp3,image_gameBg_jpg,image_return_png,image_perBg_png,movie_start1_json,movie_start9_png,movie_start8_png,movie_start7_png,movie_start8_json,movie_start9_json,movie_start6_png,movie_start5_png,movie_start4_png,movie_start3_png,movie_start4_json,movie_start5_json,movie_start7_json,movie_start3_json,movie_start6_json,movie_start2_json,movie_start10_json,movie_start10_png,movie_start2_png,movie_start1_png",
+			"keys": "config_born_json,sound_game_mp3,image_startBg_jpg,image_start1_png,image_start2_png,image_keyend1_png,image_keyend2_png,image_keyend3_png,image_keyend4_png,image_keyMiddle1_png,image_keyMiddle3_png,image_keyMiddle4_png,image_keyStart12_png,image_keyStart22_png,image_keyStart11_png,image_keyMiddle2_png,image_keyStart31_png,image_keyStart41_png,image_keyStart32_png,image_keyStart42_png,image_keyStart21_png,sound_start_mp3,image_gameBg_jpg,image_return_png,image_perBg_png,movie_start1_json,movie_start9_png,movie_start8_png,movie_start7_png,movie_start8_json,movie_start9_json,movie_start6_png,movie_start5_png,movie_start4_png,movie_start3_png,movie_start4_json,movie_start5_json,movie_start7_json,movie_start3_json,movie_start6_json,movie_start2_json,movie_start10_json,movie_start10_png,movie_start2_png,movie_start1_png,sound_light_mp3,sound_cheer_mp3,sound_ready_wav",
 			"name": "preload"
 		}
 	],
@@ -230,6 +230,21 @@
 			"name": "movie_start1_png",
 			"type": "image",
 			"url": "movie/movie_start1.png"
+		},
+		{
+			"name": "sound_light_mp3",
+			"type": "sound",
+			"url": "sound/sound_light.mp3"
+		},
+		{
+			"name": "sound_cheer_mp3",
+			"type": "sound",
+			"url": "sound/sound_cheer.mp3"
+		},
+		{
+			"name": "sound_ready_wav",
+			"type": "sound",
+			"url": "sound/sound_ready.wav"
 		}
 	]
 }

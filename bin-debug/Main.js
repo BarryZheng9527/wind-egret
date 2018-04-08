@@ -24,12 +24,14 @@ var Main = (function (_super) {
         RES.loadConfig("resource/default.res.json", "resource/");
         EventManager.getInstance().addEventListener(DataEvent.EVENT_SHOW_GAME, this.onShowGame, this);
         EventManager.getInstance().addEventListener(DataEvent.EVENT_SHOW_START, this.onShowStart, this);
+        EventManager.getInstance().addEventListener(DataEvent.EVENT_SHOW_START_MOVIE, this.onShowStartMovie, this);
         this.removeEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
         this.addEventListener(egret.Event.REMOVED_FROM_STAGE, this.onRemoveFromStage, this);
     };
     Main.prototype.onRemoveFromStage = function (event) {
         EventManager.getInstance().removeEventListener(DataEvent.EVENT_SHOW_GAME, this.onShowGame, this);
         EventManager.getInstance().removeEventListener(DataEvent.EVENT_SHOW_START, this.onShowStart, this);
+        EventManager.getInstance().removeEventListener(DataEvent.EVENT_SHOW_START_MOVIE, this.onShowStartMovie, this);
         this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
         this.removeEventListener(egret.Event.REMOVED_FROM_STAGE, this.onRemoveFromStage, this);
     };
@@ -71,27 +73,43 @@ var Main = (function (_super) {
     Main.prototype.onShowGame = function (event) {
         this.switchScene(2);
     };
+    Main.prototype.onShowStartMovie = function (event) {
+        this.switchScene(3);
+    };
     /**
      * 载入场景
      */
     Main.prototype.switchScene = function (nType) {
-        if (nType == 1) {
-            if (this._stGamePanel && this._stGamePanel.parent) {
-                this._stGamePanel.parent.removeChild(this._stGamePanel);
-            }
-            if (this._stStartPanel == null) {
-                this._stStartPanel = new StartPanel();
-            }
-            this.addChild(this._stStartPanel);
+        if (this._stStartPanel && this._stStartPanel.parent) {
+            this._stStartPanel.parent.removeChild(this._stStartPanel);
         }
-        else {
-            if (this._stStartPanel && this._stStartPanel.parent) {
-                this._stStartPanel.parent.removeChild(this._stStartPanel);
-            }
-            if (this._stGamePanel == null) {
-                this._stGamePanel = new GamePanel();
-            }
-            this.addChild(this._stGamePanel);
+        if (this._stGamePanel && this._stGamePanel.parent) {
+            this._stGamePanel.parent.removeChild(this._stGamePanel);
+        }
+        if (this._stMoviePanel && this._stMoviePanel.parent) {
+            this._stMoviePanel.parent.removeChild(this._stMoviePanel);
+        }
+        switch (nType) {
+            case 1:
+                if (this._stStartPanel == null) {
+                    this._stStartPanel = new StartPanel();
+                }
+                this.addChild(this._stStartPanel);
+                break;
+            case 2:
+                if (this._stGamePanel == null) {
+                    this._stGamePanel = new GamePanel();
+                }
+                this.addChild(this._stGamePanel);
+                break;
+            case 3:
+                if (this._stMoviePanel == null) {
+                    this._stMoviePanel = new MoviePanel();
+                }
+                this.addChild(this._stMoviePanel);
+                break;
+            default:
+                break;
         }
     };
     return Main;

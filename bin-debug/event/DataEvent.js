@@ -20,6 +20,7 @@ var DataEvent = (function (_super) {
     }
     DataEvent.EVENT_SHOW_GAME = "EVENT_SHOW_GAME";
     DataEvent.EVENT_SHOW_START = "EVENT_SHOW_START";
+    DataEvent.EVENT_SHOW_START_MOVIE = "EVENT_SHOW_START_MOVIE";
     return DataEvent;
 }(egret.Event));
 __reflect(DataEvent.prototype, "DataEvent");

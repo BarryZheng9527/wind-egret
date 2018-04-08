@@ -47,13 +47,6 @@ var GamePanel = (function (_super) {
         var texture = RES.getRes("image_gameBg_jpg");
         this._bmpBg.texture = texture;
         this.addChild(this._bmpBg);
-        if (!this._bmpNigthBg) {
-            this._bmpNigthBg = new egret.Bitmap();
-        }
-        var texture1 = RES.getRes("image_gameNightBg_jpg");
-        this._bmpNigthBg.texture = texture1;
-        this.addChild(this._bmpNigthBg);
-        this._bmpNigthBg.visible = false;
         if (!this._bmpPerBg) {
             this._bmpPerBg = new egret.Bitmap();
         }
@@ -67,6 +60,11 @@ var GamePanel = (function (_super) {
         this._btnReturn.SetResource("image_return_png", "image_return_png", this.onReturnTouch);
         this._btnReturn.x = this.stage.stageWidth - this._btnReturn.width;
         this.addChild(this._btnReturn);
+        //播放准备音效
+        if (!this._soundReady) {
+            this._soundReady = RES.getRes("sound_ready_wav");
+        }
+        this._channelReady = this._soundReady.play(0, 1);
         //载入游戏音乐
         if (!this._soundGame) {
             this._soundGame = RES.getRes("sound_game_mp3");
@@ -123,11 +121,6 @@ var GamePanel = (function (_super) {
      * 音乐播放完毕
      */
     GamePanel.prototype.onGameSoundComplete = function (event) {
-        if (this._channelGame) {
-            this._channelGame.removeEventListener(egret.Event.SOUND_COMPLETE, this.onGameSoundComplete, this);
-            this._channelGame.stop();
-            this._channelGame = null;
-        }
         egret.stopTick(this.timerFunc, this);
     };
     /**
@@ -140,6 +133,10 @@ var GamePanel = (function (_super) {
      * 场景清理
      */
     GamePanel.prototype.Clear = function () {
+        if (this._channelReady) {
+            this._channelReady.stop();
+            this._channelReady = null;
+        }
         if (this._channelGame) {
             this._channelGame.removeEventListener(egret.Event.SOUND_COMPLETE, this.onGameSoundComplete, this);
             this._channelGame.stop();
@@ -148,9 +145,9 @@ var GamePanel = (function (_super) {
         egret.stopTick(this.timerFunc, this);
         NoteManager.getInstance().HideAllNote();
         this._bmpBg = null;
-        this._bmpNigthBg = null;
         this._bmpPerBg = null;
         this._btnReturn = null;
+        this._soundReady = null;
         this._soundGame = null;
         this._nGameTime = 0;
         this._nNoteIndex = 0;

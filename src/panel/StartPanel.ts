@@ -57,16 +57,19 @@ class StartPanel extends egret.DisplayObjectContainer
 
     private onTouch(event:egret.TouchEvent) 
     {
-        EventManager.getInstance().dispatchEvent(new DataEvent(DataEvent.EVENT_SHOW_GAME));
+        EventManager.getInstance().dispatchEvent(new DataEvent(DataEvent.EVENT_SHOW_START_MOVIE));
     }
 
     private Clear():void
     {
-        this._channelGame.stop();
+        if (this._channelGame)
+        {
+            this._channelGame.stop();
+            this._channelGame = null;
+        }
 
         this._bmpBg = null;
         this._btnStart = null;
         this._soundGame = null;
-        this._channelGame = null;
     }
 }

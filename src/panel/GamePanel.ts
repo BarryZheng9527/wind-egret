@@ -5,6 +5,9 @@ class GamePanel extends egret.DisplayObjectContainer
     private _bmpPerBg:egret.Bitmap;
     //返回按钮
     private _btnReturn:MyButton;
+    //准备音效
+    private _soundReady:egret.Sound;
+    private _channelReady:egret.SoundChannel;
     //背景音乐
     private _soundGame:egret.Sound;
     private _channelGame:egret.SoundChannel;
@@ -74,6 +77,12 @@ class GamePanel extends egret.DisplayObjectContainer
         this._btnReturn.SetResource("image_return_png", "image_return_png", this.onReturnTouch);
         this._btnReturn.x = this.stage.stageWidth - this._btnReturn.width;
         this.addChild(this._btnReturn);
+        //播放准备音效
+        if (!this._soundReady)
+        {
+            this._soundReady = RES.getRes("sound_ready_wav");
+        }
+        this._channelReady = this._soundReady.play(0, 1);
         //载入游戏音乐
         if (!this._soundGame)
         {
@@ -144,12 +153,6 @@ class GamePanel extends egret.DisplayObjectContainer
      */
     private onGameSoundComplete(event:egret.Event):void
     {
-        if (this._channelGame)
-        {
-            this._channelGame.removeEventListener(egret.Event.SOUND_COMPLETE, this.onGameSoundComplete, this);
-            this._channelGame.stop();
-            this._channelGame = null;
-        }
         egret.stopTick(this.timerFunc, this);
     }
 
@@ -166,6 +169,11 @@ class GamePanel extends egret.DisplayObjectContainer
      */
     private Clear():void
     {
+        if (this._channelReady)
+        {
+            this._channelReady.stop();
+            this._channelReady = null;
+        }
         if (this._channelGame)
         {
             this._channelGame.removeEventListener(egret.Event.SOUND_COMPLETE, this.onGameSoundComplete, this);
@@ -177,6 +185,7 @@ class GamePanel extends egret.DisplayObjectContainer
         this._bmpBg = null;
         this._bmpPerBg = null;
         this._btnReturn = null;
+        this._soundReady = null;
         this._soundGame = null;
         this._nGameTime = 0;
         this._nNoteIndex = 0;

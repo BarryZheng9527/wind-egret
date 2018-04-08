@@ -1,67 +1,50 @@
-class MoviePanel extends egret.DisplayObjectContainer 
-{
-    //场景切换动画
-    private _mfcStart1:egret.MovieClipDataFactory;
-    private _mfcStart2:egret.MovieClipDataFactory;
-    private _mfcStart3:egret.MovieClipDataFactory;
-    private _mfcStart4:egret.MovieClipDataFactory;
-    private _mfcStart5:egret.MovieClipDataFactory;
-    private _mfcStart6:egret.MovieClipDataFactory;
-    private _mfcStart7:egret.MovieClipDataFactory;
-    private _mfcStart8:egret.MovieClipDataFactory;
-    private _mfcStart9:egret.MovieClipDataFactory;
-    private _mfcStart10:egret.MovieClipDataFactory;
-    private _mcStart:egret.MovieClip;
-    //场景切换音效
-    private _soundCheer:egret.Sound;
-    private _channelCheer:egret.SoundChannel;
-    private _soundLight:egret.Sound;
-    private _channelLight:egret.SoundChannel;
-
-    public constructor() 
-    {
-        super();
-        this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
+var __reflect = (this && this.__reflect) || function (p, c, t) {
+    p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
+};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var MoviePanel = (function (_super) {
+    __extends(MoviePanel, _super);
+    function MoviePanel() {
+        var _this = _super.call(this) || this;
+        _this.addEventListener(egret.Event.ADDED_TO_STAGE, _this.onAddToStage, _this);
+        return _this;
     }
-
-    private onAddToStage(event:egret.Event)
-    {
+    MoviePanel.prototype.onAddToStage = function (event) {
         this.removeEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
         this.addEventListener(egret.Event.REMOVED_FROM_STAGE, this.onRemoveFromStage, this);
-
         this.UpdateShow();
-    }
-
-    private onRemoveFromStage(event:egret.Event)
-    {
+    };
+    MoviePanel.prototype.onRemoveFromStage = function (event) {
         this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
         this.removeEventListener(egret.Event.REMOVED_FROM_STAGE, this.onRemoveFromStage, this);
-
         this.Clear();
-    }
-
-    public UpdateShow():void
-    {
+    };
+    MoviePanel.prototype.UpdateShow = function () {
         this.InitMovie();
         this._mcStart = new egret.MovieClip(this._mfcStart1.generateMovieClipData("start1"));
         this._mcStart.addEventListener(egret.Event.COMPLETE, this.onStartMcComplete, this);
         this.addChild(this._mcStart);
         this._mcStart.play(1);
         //播放场景切换音效
-        if (!this._soundCheer)
-        {
+        if (!this._soundCheer) {
             this._soundCheer = RES.getRes("sound_cheer_mp3");
         }
         this._channelCheer = this._soundCheer.play(0, 1);
-        if (!this._soundLight)
-        {
+        if (!this._soundLight) {
             this._soundLight = RES.getRes("sound_light_mp3");
         }
         this._channelLight = this._soundLight.play(0, 1);
-    }
-
-    private InitMovie():void
-    {
+    };
+    MoviePanel.prototype.InitMovie = function () {
         this._mfcStart1 = new egret.MovieClipDataFactory(RES.getRes("movie_start1_json"), RES.getRes("movie_start1_png"));
         this._mfcStart2 = new egret.MovieClipDataFactory(RES.getRes("movie_start2_json"), RES.getRes("movie_start2_png"));
         this._mfcStart3 = new egret.MovieClipDataFactory(RES.getRes("movie_start3_json"), RES.getRes("movie_start3_png"));
@@ -72,13 +55,10 @@ class MoviePanel extends egret.DisplayObjectContainer
         this._mfcStart8 = new egret.MovieClipDataFactory(RES.getRes("movie_start8_json"), RES.getRes("movie_start8_png"));
         this._mfcStart9 = new egret.MovieClipDataFactory(RES.getRes("movie_start9_json"), RES.getRes("movie_start9_png"));
         this._mfcStart10 = new egret.MovieClipDataFactory(RES.getRes("movie_start10_json"), RES.getRes("movie_start10_png"));
-    }
-
-    private onStartMcComplete(event:egret.Event):void
-    {
-        var szLable:string = this._mcStart.currentLabel;
-        switch (szLable)
-        {
+    };
+    MoviePanel.prototype.onStartMcComplete = function (event) {
+        var szLable = this._mcStart.currentLabel;
+        switch (szLable) {
             case "start1":
                 this._mcStart.movieClipData = this._mfcStart1.generateMovieClipData("start2");
                 this._mcStart.play(1);
@@ -149,23 +129,18 @@ class MoviePanel extends egret.DisplayObjectContainer
             default:
                 break;
         }
-    }
-
-    private Clear():void
-    {
+    };
+    MoviePanel.prototype.Clear = function () {
         this._mcStart.stop();
         this._mcStart.removeEventListener(egret.Event.COMPLETE, this.onStartMcComplete, this);
-        if (this._channelCheer)
-        {
+        if (this._channelCheer) {
             this._channelCheer.stop();
             this._channelCheer = null;
         }
-        if (this._channelLight)
-        {
+        if (this._channelLight) {
             this._channelLight.stop();
             this._channelLight = null;
         }
-
         this._mfcStart1 = null;
         this._mfcStart2 = null;
         this._mfcStart3 = null;
@@ -177,5 +152,8 @@ class MoviePanel extends egret.DisplayObjectContainer
         this._mfcStart9 = null;
         this._mfcStart10 = null;
         this._mcStart = null;
-    }
-}
+    };
+    return MoviePanel;
+}(egret.DisplayObjectContainer));
+__reflect(MoviePanel.prototype, "MoviePanel");
+//# sourceMappingURL=MoviePanel.js.map
