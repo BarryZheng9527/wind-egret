@@ -54,6 +54,26 @@ var GamePanel = (function (_super) {
         this._bmpPerBg.texture = texture2;
         this._bmpPerBg.y = this.stage.height - 543;
         this.addChild(this._bmpPerBg);
+        //边线闪烁
+        if (!this._bmpSideLine) {
+            this._bmpSideLine = new egret.Bitmap();
+        }
+        var texture3 = RES.getRes("image_sideline_png");
+        this._bmpSideLine.texture = texture3;
+        this._bmpSideLine.x = (this.stage.width - this._bmpSideLine.width) / 2;
+        this._bmpSideLine.y = (this.stage.height - this._bmpSideLine.height) / 2;
+        this._bmpSideLine.alpha = 0;
+        this.addChild(this._bmpSideLine);
+        egret.setTimeout(this.SidelineBlink, this, 4000);
+        //场景特效
+        this._mfcScene1 = new egret.MovieClipDataFactory(RES.getRes("movie_scene1_json"), RES.getRes("movie_scene1_png"));
+        this._mfcScene2 = new egret.MovieClipDataFactory(RES.getRes("movie_scene2_json"), RES.getRes("movie_scene2_png"));
+        this._mcScene = new egret.MovieClip(this._mfcScene1.generateMovieClipData("scene1"));
+        this._mcScene.addEventListener(egret.Event.COMPLETE, this.onSceneMcComplete, this);
+        this.addChild(this._mcScene);
+        this._mcScene.visible = false;
+        egret.setTimeout(function () { this._mcScene.visible = true; this._mcScene.play(1); }, this, 4000);
+        //返回按钮
         if (!this._btnReturn) {
             this._btnReturn = new MyButton();
         }
@@ -118,10 +138,44 @@ var GamePanel = (function (_super) {
         NoteManager.getInstance().HideNote(note);
     };
     /**
+     * 边线闪烁
+     */
+    GamePanel.prototype.SidelineBlink = function () {
+        if (this._bmpSideLine.alpha == 0) {
+            egret.Tween.get(this._bmpSideLine).to({ alpha: 1 }, 500, egret.Ease.sineIn).call(this.SidelineBlink, this);
+        }
+        else if (this._bmpSideLine.alpha == 1) {
+            egret.Tween.get(this._bmpSideLine).to({ alpha: 0 }, 500, egret.Ease.sineIn).call(this.SidelineBlink, this);
+        }
+    };
+    /**
+     * 场景特效播放完毕
+     */
+    GamePanel.prototype.onSceneMcComplete = function (event) {
+        var szLable = this._mcScene.currentLabel;
+        switch (szLable) {
+            case "scene1":
+                this._mcScene.movieClipData = this._mfcScene2.generateMovieClipData("scene2");
+                this._mcScene.play(1);
+                break;
+            case "scene2":
+                this._mcScene.movieClipData = this._mfcScene1.generateMovieClipData("scene1");
+                this._mcScene.play(1);
+                break;
+            default:
+                break;
+        }
+    };
+    /**
      * 音乐播放完毕
      */
     GamePanel.prototype.onGameSoundComplete = function (event) {
         egret.stopTick(this.timerFunc, this);
+        this._mcScene.stop();
+        this._mcScene.removeEventListener(egret.Event.COMPLETE, this.onSceneMcComplete, this);
+        if (this._mcScene && this._mcScene.parent) {
+            this._mcScene.parent.removeChild(this._mcScene);
+        }
     };
     /**
      * 返回主界面
@@ -133,6 +187,11 @@ var GamePanel = (function (_super) {
      * 场景清理
      */
     GamePanel.prototype.Clear = function () {
+        this._mcScene.stop();
+        this._mcScene.removeEventListener(egret.Event.COMPLETE, this.onSceneMcComplete, this);
+        if (this._mcScene && this._mcScene.parent) {
+            this._mcScene.parent.removeChild(this._mcScene);
+        }
         if (this._channelReady) {
             this._channelReady.stop();
             this._channelReady = null;
@@ -146,6 +205,9 @@ var GamePanel = (function (_super) {
         NoteManager.getInstance().HideAllNote();
         this._bmpBg = null;
         this._bmpPerBg = null;
+        this._mfcScene1 = null;
+        this._mfcScene2 = null;
+        this._mcScene = null;
         this._btnReturn = null;
         this._soundReady = null;
         this._soundGame = null;
