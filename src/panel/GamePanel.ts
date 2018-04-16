@@ -22,17 +22,31 @@ class GamePanel extends egret.DisplayObjectContainer
     private _nTimeFlag:number;
     //当前使用的音符下标
     private _nNoteIndex:number;
+    //有效点击区域
+    private _rectClick1:egret.Rectangle;
+    private _rectClick2:egret.Rectangle;
+    private _rectClick3:egret.Rectangle;
+    private _rectClick4:egret.Rectangle;
+    //判定区域
+    private _rectPerfect:egret.Rectangle;
+    private _rectGreat:egret.Rectangle;
+    private _rectMiss:egret.Rectangle;
 
     public constructor()
     {
         super();
         this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
+        this.touchEnabled = true;
     }
 
     private onAddToStage(event:egret.Event)
     {
         this.removeEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
         this.addEventListener(egret.Event.REMOVED_FROM_STAGE, this.onRemoveFromStage, this);
+
+        this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onGameTouch, this);
+        this.addEventListener(egret.TouchEvent.TOUCH_END, this.onGameTouch, this);
+        this.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.onGameTouchMove, this);
 
         this.InitData();
         this.UpdateShow();
@@ -42,6 +56,10 @@ class GamePanel extends egret.DisplayObjectContainer
     {
         this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
         this.removeEventListener(egret.Event.REMOVED_FROM_STAGE, this.onRemoveFromStage, this);
+
+        this.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onGameTouch, this);
+        this.removeEventListener(egret.TouchEvent.TOUCH_END, this.onGameTouch, this);
+        this.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.onGameTouchMove, this);
 
         this.Clear();
     }
@@ -54,6 +72,13 @@ class GamePanel extends egret.DisplayObjectContainer
         this._nGameTime = 0;
         this._nTimeFlag = 0;
         this._nNoteIndex = 0;
+        this._rectClick1 = new egret.Rectangle(0, this.stage.height * 3 / 4, this.stage.width * 55 / 192, this.stage.height / 4);
+        this._rectClick2 = new egret.Rectangle(this.stage.width * 55 / 192, this.stage.height * 3 / 4, this.stage.width * 41 / 192, this.stage.height / 4);
+        this._rectClick3 = new egret.Rectangle(this.stage.width / 2, this.stage.height * 3 / 4, this.stage.width * 41 / 192, this.stage.height / 4);
+        this._rectClick4 = new egret.Rectangle(this.stage.width * 137 / 192, this.stage.height * 3 / 4, this.stage.width * 55 / 192, this.stage.height / 4);
+        this._rectPerfect = new egret.Rectangle(0, this.stage.height * 27 / 32, this.stage.width, this.stage.height / 16);
+        this._rectGreat = new egret.Rectangle(0, this.stage.height * 25 / 32, this.stage.width, this.stage.height * 3 / 16);
+        this._rectMiss = new egret.Rectangle(0, this.stage.height * 3 / 4, this.stage.width, this.stage.height / 4);
     }
 
     /**
@@ -123,6 +148,77 @@ class GamePanel extends egret.DisplayObjectContainer
     }
 
     /**
+     * 获取点击是否在有效区域，在则返回所在音符滑道，否则返回0
+     */
+    private GetTouchPathWay(nPosX:number, nPosY:number):number
+    {
+        if (this._rectClick1.contains(nPosX, nPosY))
+        {
+            return 1;
+        }
+        if (this._rectClick2.contains(nPosX, nPosY))
+        {
+            return 2;
+        }
+        if (this._rectClick3.contains(nPosX, nPosY))
+        {
+            return 3;
+        }
+        if (this._rectClick4.contains(nPosX, nPosY))
+        {
+            return 4;
+        }
+        return 0;
+    }
+
+    /**
+     * 点击开始
+     */
+    private TouchBeginHandler(nPosX:number, nPosY:number):void
+    {
+        var nTouchPathWay:number = this.GetTouchPathWay(nPosX, nPosY);
+        switch (nTouchPathWay)
+        {
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * 游戏点击事件
+     */
+    private onGameTouch(event:egret.TouchEvent) 
+    {
+        switch (event.type)
+        {
+            case egret.TouchEvent.TOUCH_BEGIN:
+                break;
+            case egret.TouchEvent.TOUCH_END:
+                break;
+            default:
+                break;
+        }
+    }
+
+    private onGameTouchMove(event:egret.TouchEvent) 
+    {
+        if (event.localX > 20 && event.localX < 243 && event.localY > 20 && event.localY < 71)
+        {
+        }
+        else
+        {
+        }
+    }
+
+    /**
      * 计时器回调
      */
     private timerFunc(curTime:number):boolean 
@@ -141,27 +237,27 @@ class GamePanel extends egret.DisplayObjectContainer
 
             var note:NoteItem = NoteManager.getInstance().GetNote(nTime, nPathWay, nType);
             note.scaleX = note.scaleY = 0.01;
-            note.x = this.stage.stageWidth * 19 / 48 + this.stage.stageWidth * nPathWay / 24;
-            note.y = this.stage.stageHeight * 27 / 128;
+            note.x = this.stage.width * 19 / 48 + this.stage.width * nPathWay / 24;
+            note.y = this.stage.height * 27 / 128;
             var nTargetX:number;
             if (nPathWay == 1)
             {
-                nTargetX = this.stage.stageWidth * 17 / 192 - 114;
+                nTargetX = this.stage.width * 17 / 192 - 114;
             }
             else if (nPathWay == 2)
             {
-                nTargetX = this.stage.stageWidth * 23 / 64 - 114;
+                nTargetX = this.stage.width * 23 / 64 - 114;
             }
             else if (nPathWay == 3)
             {
-                nTargetX = this.stage.stageWidth * 41 / 64 - 114;
+                nTargetX = this.stage.width * 41 / 64 - 114;
             }
             else if (nPathWay == 4)
             {
-                nTargetX = this.stage.stageWidth * 175 / 192 - 114;
+                nTargetX = this.stage.width * 175 / 192 - 114;
             }
             this.addChild(note);
-            egret.Tween.get(note).to({x:nTargetX, y:this.stage.stageHeight - 42, scaleX:1, scaleY:1}, GameConst.NOTE_FLY_TIME, egret.Ease.sineIn).call(this.removeNote, this, [note]);
+            egret.Tween.get(note).to({x:nTargetX, y:this.stage.height - 42, scaleX:1, scaleY:1}, GameConst.NOTE_FLY_TIME, egret.Ease.sineIn).call(this.removeNote, this, [note]);
         }
         return false;
     }
@@ -259,6 +355,7 @@ class GamePanel extends egret.DisplayObjectContainer
         NoteManager.getInstance().HideAllNote();
         this._bmpBg = null;
         this._bmpPerBg = null;
+        this._bmpSideLine = null;
         this._mfcScene1 = null;
         this._mfcScene2 = null;
         this._mcScene = null;
@@ -267,5 +364,12 @@ class GamePanel extends egret.DisplayObjectContainer
         this._soundGame = null;
         this._nGameTime = 0;
         this._nNoteIndex = 0;
+        this._rectClick1 = null;
+        this._rectClick2 = null;
+        this._rectClick3 = null;
+        this._rectClick4 = null;
+        this._rectPerfect = null;
+        this._rectGreat = null;
+        this._rectMiss = null;
     }
 }
