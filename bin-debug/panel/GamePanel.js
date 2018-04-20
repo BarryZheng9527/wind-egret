@@ -155,8 +155,7 @@ var GamePanel = (function (_super) {
     /**
      * 点击开始
      */
-    GamePanel.prototype.TouchBeginHandler = function (nPosX, nPosY) {
-        var nTouchPathWay = this.GetTouchPathWay(nPosX, nPosY);
+    GamePanel.prototype.TouchBeginHandler = function (nTouchPathWay) {
         if (nTouchPathWay > 0) {
             var nType1 = nTouchPathWay * 10;
             var nType2 = nTouchPathWay * 10 + 1;
@@ -181,12 +180,132 @@ var GamePanel = (function (_super) {
                     }
                 }
             }
+            switch (nTouchPathWay) {
+                case 1:
+                    this._bPerDown1 = true;
+                    break;
+                case 2:
+                    this._bPerDown2 = true;
+                    break;
+                case 3:
+                    this._bPerDown3 = true;
+                    break;
+                case 4:
+                    this._bPerDown4 = true;
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+    /**
+     * 点击持续
+     */
+    GamePanel.prototype.TouchPressHandler = function () {
+        var objShow = NoteManager.getInstance().objShow;
+        if (objShow) {
+            if (this._bPerDown1) {
+                var arrNote11 = objShow[12];
+                var arrNote12 = objShow[13];
+                if (arrNote11 && arrNote11.length > 0) {
+                    for (var iIndex11 = 0; iIndex11 < arrNote11.length; ++iIndex11) {
+                        var curNote11 = arrNote11[iIndex11];
+                        if (this.GetScoreCheckID(curNote11) == 1) {
+                            NoteManager.getInstance().HideNote(curNote11);
+                        }
+                    }
+                }
+                if (arrNote12 && arrNote12.length > 0) {
+                    for (var iIndex12 = 0; iIndex12 < arrNote12.length; ++iIndex12) {
+                        var curNote12 = arrNote12[iIndex12];
+                        if (this.GetScoreCheckID(curNote12) == 1) {
+                            NoteManager.getInstance().HideNote(curNote12);
+                        }
+                    }
+                }
+            }
+            if (this._bPerDown2) {
+                var arrNote21 = objShow[22];
+                var arrNote22 = objShow[23];
+                if (arrNote21 && arrNote21.length > 0) {
+                    for (var iIndex21 = 0; iIndex21 < arrNote21.length; ++iIndex21) {
+                        var curNote21 = arrNote21[iIndex21];
+                        if (this.GetScoreCheckID(curNote21) == 1) {
+                            NoteManager.getInstance().HideNote(curNote21);
+                        }
+                    }
+                }
+                if (arrNote22 && arrNote22.length > 0) {
+                    for (var iIndex22 = 0; iIndex22 < arrNote22.length; ++iIndex22) {
+                        var curNote22 = arrNote22[iIndex22];
+                        if (this.GetScoreCheckID(curNote22) == 1) {
+                            NoteManager.getInstance().HideNote(curNote22);
+                        }
+                    }
+                }
+            }
+            if (this._bPerDown3) {
+                var arrNote31 = objShow[32];
+                var arrNote32 = objShow[33];
+                if (arrNote31 && arrNote31.length > 0) {
+                    for (var iIndex31 = 0; iIndex31 < arrNote31.length; ++iIndex31) {
+                        var curNote31 = arrNote31[iIndex31];
+                        if (this.GetScoreCheckID(curNote31) == 1) {
+                            NoteManager.getInstance().HideNote(curNote31);
+                        }
+                    }
+                }
+                if (arrNote32 && arrNote32.length > 0) {
+                    for (var iIndex32 = 0; iIndex32 < arrNote32.length; ++iIndex32) {
+                        var curNote32 = arrNote32[iIndex32];
+                        if (this.GetScoreCheckID(curNote32) == 1) {
+                            NoteManager.getInstance().HideNote(curNote32);
+                        }
+                    }
+                }
+            }
+            if (this._bPerDown4) {
+                var arrNote41 = objShow[42];
+                var arrNote42 = objShow[43];
+                if (arrNote41 && arrNote41.length > 0) {
+                    for (var iIndex41 = 0; iIndex41 < arrNote41.length; ++iIndex41) {
+                        var curNote41 = arrNote41[iIndex41];
+                        if (this.GetScoreCheckID(curNote41) == 1) {
+                            NoteManager.getInstance().HideNote(curNote41);
+                        }
+                    }
+                }
+                if (arrNote42 && arrNote42.length > 0) {
+                    for (var iIndex42 = 0; iIndex42 < arrNote42.length; ++iIndex42) {
+                        var curNote42 = arrNote42[iIndex42];
+                        if (this.GetScoreCheckID(curNote42) == 1) {
+                            NoteManager.getInstance().HideNote(curNote42);
+                        }
+                    }
+                }
+            }
         }
     };
     /**
      * 点击结束
      */
-    GamePanel.prototype.TouchEndHandler = function () {
+    GamePanel.prototype.TouchEndHandler = function (nTouchPathWay) {
+        switch (nTouchPathWay) {
+            case 1:
+                this._bPerDown1 = true;
+                break;
+            case 2:
+                this._bPerDown2 = true;
+                break;
+            case 3:
+                this._bPerDown3 = true;
+                break;
+            case 4:
+                this._bPerDown4 = true;
+                break;
+            default:
+                break;
+        }
     };
     /**
      * 游戏点击事件
@@ -194,10 +313,12 @@ var GamePanel = (function (_super) {
     GamePanel.prototype.onGameTouch = function (event) {
         switch (event.type) {
             case egret.TouchEvent.TOUCH_BEGIN:
-                this.TouchBeginHandler(event.localX, event.localY);
+                var nTouchPathWayStart = this.GetTouchPathWay(event.localX, event.localY);
+                this.TouchBeginHandler(nTouchPathWayStart);
                 break;
             case egret.TouchEvent.TOUCH_END:
-                this.TouchEndHandler();
+                var nTouchPathWayEnd = this.GetTouchPathWay(event.localX, event.localY);
+                this.TouchEndHandler(nTouchPathWayEnd);
                 break;
             default:
                 break;
@@ -207,9 +328,28 @@ var GamePanel = (function (_super) {
      * 游戏滑动事件
      */
     GamePanel.prototype.onGameTouchMove = function (event) {
-        if (event.localX > 20 && event.localX < 243 && event.localY > 20 && event.localY < 71) {
-        }
-        else {
+        this._bPerDown1 = false;
+        this._bPerDown2 = false;
+        this._bPerDown3 = false;
+        this._bPerDown4 = false;
+        if (event.localX > 20 && event.localX < this.stage.stageWidth - 20 && event.localY > this.stage.stageHeight * 3 / 4 && event.localY < this.stage.stageHeight - 20) {
+            var nPerDownType = this.GetTouchPathWay(event.localX, event.localY);
+            switch (nPerDownType) {
+                case 1:
+                    this._bPerDown1 = true;
+                    break;
+                case 2:
+                    this._bPerDown2 = true;
+                    break;
+                case 3:
+                    this._bPerDown3 = true;
+                    break;
+                case 4:
+                    this._bPerDown4 = true;
+                    break;
+                default:
+                    break;
+            }
         }
     };
     /**
@@ -227,8 +367,8 @@ var GamePanel = (function (_super) {
             nType = arrBorn[this._nNoteIndex].type;
             this._nNoteIndex++;
             var note = NoteManager.getInstance().GetNote(nTime, nPathWay, nType);
-            note.scaleX = note.scaleY = 0.01;
-            note.x = this.stage.stageWidth * 19 / 48 + this.stage.stageWidth * nPathWay / 24;
+            note.scaleX = note.scaleY = 0.2;
+            note.x = this.stage.stageWidth * 19 / 48 + this.stage.stageWidth * nPathWay / 24 - 23;
             note.y = this.stage.stageHeight * 27 / 128;
             var nTargetX;
             if (nPathWay == 1) {
@@ -246,6 +386,7 @@ var GamePanel = (function (_super) {
             this.addChild(note);
             egret.Tween.get(note).to({ x: nTargetX, y: this.stage.stageHeight - 42, scaleX: 1, scaleY: 1 }, GameConst.NOTE_FLY_TIME, egret.Ease.sineIn).call(this.removeNote, this, [note]);
         }
+        this.TouchPressHandler();
         return false;
     };
     GamePanel.prototype.removeNote = function (note) {

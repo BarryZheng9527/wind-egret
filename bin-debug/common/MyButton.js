@@ -59,15 +59,7 @@ var MyButton = (function (_super) {
         }
     };
     MyButton.prototype.onTouchMove = function (event) {
-        // if (event.localX > 20 && event.localX < 243 && event.localY > 20 && event.localY < 71)
-        // {
-        //     this._bmpBg.texture = this._textureDown;
-        // }
-        // else
-        // {
-        //     this._bmpBg.texture = this._textureUp;
-        // }
-        if (this.contains(event.target)) {
+        if (event.localX > 20 && event.localX < 243 && event.localY > 20 && event.localY < 71) {
             this._bmpBg.texture = this._textureDown;
         }
         else {
