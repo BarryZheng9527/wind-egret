@@ -25,6 +25,13 @@ var NoteManager = (function (_super) {
         }
         return this.gInstance;
     };
+    Object.defineProperty(NoteManager.prototype, "objShow", {
+        get: function () {
+            return this._objShow;
+        },
+        enumerable: true,
+        configurable: true
+    });
     /**
      * 获取音符
      */
@@ -53,7 +60,7 @@ var NoteManager = (function (_super) {
      * 归还音符
      */
     NoteManager.prototype.ReturnNote = function (note) {
-        var arrNote = this._objCache[note._nType];
+        var arrNote = this._objCache[note.nNoteType];
         arrNote.push(note);
     };
     /**
@@ -61,12 +68,12 @@ var NoteManager = (function (_super) {
      */
     NoteManager.prototype.ShowNote = function (note) {
         var arrNote;
-        if (this._objShow[note._nType]) {
-            arrNote = this._objShow[note._nType];
+        if (this._objShow[note.nNoteType]) {
+            arrNote = this._objShow[note.nNoteType];
         }
         else {
             arrNote = new Array();
-            this._objShow[note._nType] = arrNote;
+            this._objShow[note.nNoteType] = arrNote;
         }
         arrNote.push(note);
     };
@@ -74,10 +81,13 @@ var NoteManager = (function (_super) {
      * 从显示列表移除音符
      */
     NoteManager.prototype.HideNote = function (note) {
-        var arrNote = this._objShow[note._nType];
+        if (note && note.parent) {
+            note.parent.removeChild(note);
+        }
+        var arrNote = this._objShow[note.nNoteType];
         for (var iIndex = 0; iIndex < arrNote.length; ++iIndex) {
             var curNote = arrNote[iIndex];
-            if (curNote._nKey = note._nKey) {
+            if (curNote.nKey == note.nKey) {
                 arrNote.splice(iIndex, 1);
             }
         }

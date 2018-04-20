@@ -28,6 +28,27 @@ var NoteItem = (function (_super) {
         this.removeEventListener(egret.Event.REMOVED_FROM_STAGE, this.onRemoveFromStage, this);
         this.Clear();
     };
+    Object.defineProperty(NoteItem.prototype, "nKey", {
+        get: function () {
+            return this._nTime * 100 + this._nPathWay * 10 + this._nType * 1;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(NoteItem.prototype, "nNoteType", {
+        get: function () {
+            return this._nPathWay * 10 + this._nType * 1;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(NoteItem.prototype, "nPathWay", {
+        get: function () {
+            return this._nPathWay;
+        },
+        enumerable: true,
+        configurable: true
+    });
     /**
      * 设置音符类型
      * nTime 音符产生时间
@@ -35,15 +56,16 @@ var NoteItem = (function (_super) {
      * nType 配置类型（0单独音符，1长音符起始，2长音符中段，3长音符结尾）
      */
     NoteItem.prototype.SetNoteStyle = function (nTime, nPathWay, nType) {
-        this._nKey = nTime * 100 + nPathWay * 10 + nType * 1;
-        this._nType = nPathWay * 10 + nType * 1;
+        this._nTime = nTime;
+        this._nPathWay = nPathWay;
+        this._nType = nType;
     };
     NoteItem.prototype.AddNote = function () {
         if (!this._bmpNote) {
             this._bmpNote = new egret.Bitmap();
         }
         var texture;
-        switch (this._nType) {
+        switch (this.nNoteType) {
             case 10:
                 texture = RES.getRes("image_keyStart11_png");
                 break;

@@ -37,8 +37,8 @@ class StartPanel extends egret.DisplayObjectContainer {
             this._btnStart = new MyButton();
         }
         this._btnStart.SetResource("image_start1_png", "image_start2_png", this.onTouch);
-        this._btnStart.x = this.stage.width / 16;
-        this._btnStart.y = this.stage.height / 2;
+        this._btnStart.x = this.stage.stageWidth / 16;
+        this._btnStart.y = this.stage.stageHeight / 2;
         this.addChild(this._btnStart);
         //载入游戏音乐
         if (!this._soundGame) {

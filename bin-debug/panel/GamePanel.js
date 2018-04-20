@@ -43,18 +43,16 @@ var GamePanel = (function (_super) {
         this._nGameTime = 0;
         this._nTimeFlag = 0;
         this._nNoteIndex = 0;
-        this._rectClick1 = new egret.Rectangle(0, this.stage.height * 3 / 4, this.stage.width * 55 / 192, this.stage.height / 4);
-        this._rectClick2 = new egret.Rectangle(this.stage.width * 55 / 192, this.stage.height * 3 / 4, this.stage.width * 41 / 192, this.stage.height / 4);
-        this._rectClick3 = new egret.Rectangle(this.stage.width / 2, this.stage.height * 3 / 4, this.stage.width * 41 / 192, this.stage.height / 4);
-        this._rectClick4 = new egret.Rectangle(this.stage.width * 137 / 192, this.stage.height * 3 / 4, this.stage.width * 55 / 192, this.stage.height / 4);
-        this._rectPerfect = new egret.Rectangle(0, this.stage.height * 27 / 32, this.stage.width, this.stage.height / 16);
-        this._rectGreat = new egret.Rectangle(0, this.stage.height * 25 / 32, this.stage.width, this.stage.height * 3 / 16);
-        this._rectMiss = new egret.Rectangle(0, this.stage.height * 3 / 4, this.stage.width, this.stage.height / 4);
+        this._bPerDown1 = false;
+        this._bPerDown2 = false;
+        this._bPerDown3 = false;
+        this._bPerDown4 = false;
     };
     /**
      * 更新显示
      */
     GamePanel.prototype.UpdateShow = function () {
+        //背景图
         if (!this._bmpBg) {
             this._bmpBg = new egret.Bitmap();
         }
@@ -66,19 +64,27 @@ var GamePanel = (function (_super) {
         }
         var texture2 = RES.getRes("image_perBg_png");
         this._bmpPerBg.texture = texture2;
-        this._bmpPerBg.y = this.stage.height - 543;
+        this._bmpPerBg.y = this.stage.stageHeight - 543;
         this.addChild(this._bmpPerBg);
+        //点击和判定区域
+        this._rectClick1 = new egret.Rectangle(0, this.stage.stageHeight * 3 / 4, this.stage.stageWidth * 55 / 192, this.stage.stageHeight / 4);
+        this._rectClick2 = new egret.Rectangle(this.stage.stageWidth * 55 / 192, this.stage.stageHeight * 3 / 4, this.stage.stageWidth * 41 / 192, this.stage.stageHeight / 4);
+        this._rectClick3 = new egret.Rectangle(this.stage.stageWidth / 2, this.stage.stageHeight * 3 / 4, this.stage.stageWidth * 41 / 192, this.stage.stageHeight / 4);
+        this._rectClick4 = new egret.Rectangle(this.stage.stageWidth * 137 / 192, this.stage.stageHeight * 3 / 4, this.stage.stageWidth * 55 / 192, this.stage.stageHeight / 4);
+        this._rectPerfect = new egret.Rectangle(0, this.stage.stageHeight * 27 / 32, this.stage.stageWidth, this.stage.stageHeight / 16);
+        this._rectGreat = new egret.Rectangle(0, this.stage.stageHeight * 25 / 32, this.stage.stageWidth, this.stage.stageHeight * 3 / 16);
+        this._rectMiss = new egret.Rectangle(0, this.stage.stageHeight * 3 / 4, this.stage.stageWidth, this.stage.stageHeight / 4);
         //边线闪烁
         if (!this._bmpSideLine) {
             this._bmpSideLine = new egret.Bitmap();
         }
         var texture3 = RES.getRes("image_sideline_png");
         this._bmpSideLine.texture = texture3;
-        this._bmpSideLine.x = (this.stage.width - this._bmpSideLine.width) / 2;
-        this._bmpSideLine.y = (this.stage.height - this._bmpSideLine.height) / 2;
+        this._bmpSideLine.x = (this.stage.stageWidth - this._bmpSideLine.width) / 2;
+        this._bmpSideLine.y = (this.stage.stageHeight - this._bmpSideLine.height) / 2;
         this._bmpSideLine.alpha = 0;
         this.addChild(this._bmpSideLine);
-        egret.setTimeout(this.SidelineBlink, this, 4000);
+        this._nTimeOutId1 = egret.setTimeout(this.SidelineBlink, this, 4000);
         //场景特效
         this._mfcScene1 = new egret.MovieClipDataFactory(RES.getRes("movie_scene1_json"), RES.getRes("movie_scene1_png"));
         this._mfcScene2 = new egret.MovieClipDataFactory(RES.getRes("movie_scene2_json"), RES.getRes("movie_scene2_png"));
@@ -86,7 +92,7 @@ var GamePanel = (function (_super) {
         this._mcScene.addEventListener(egret.Event.COMPLETE, this.onSceneMcComplete, this);
         this.addChild(this._mcScene);
         this._mcScene.visible = false;
-        egret.setTimeout(function () { this._mcScene.visible = true; this._mcScene.play(1); }, this, 4000);
+        this._nTimeOutId2 = egret.setTimeout(function () { this._mcScene.visible = true; this._mcScene.play(1); }, this, 4000);
         //返回按钮
         if (!this._btnReturn) {
             this._btnReturn = new MyButton();
@@ -128,22 +134,59 @@ var GamePanel = (function (_super) {
         return 0;
     };
     /**
+     * 音符判定
+     */
+    GamePanel.prototype.GetScoreCheckID = function (note) {
+        var nCheckId = 0;
+        if (note) {
+            var nNoteY = note.height * note.scaleY / 2 + note.y;
+            if (nNoteY >= this._rectPerfect.top && nNoteY <= this._rectPerfect.bottom) {
+                nCheckId = 1;
+            }
+            else if (nNoteY >= this._rectGreat.top && nNoteY <= this._rectGreat.bottom) {
+                nCheckId = 2;
+            }
+            else if (nNoteY >= this._rectMiss.top && nNoteY <= this._rectMiss.bottom) {
+                nCheckId = 3;
+            }
+        }
+        return nCheckId;
+    };
+    /**
      * 点击开始
      */
     GamePanel.prototype.TouchBeginHandler = function (nPosX, nPosY) {
         var nTouchPathWay = this.GetTouchPathWay(nPosX, nPosY);
-        switch (nTouchPathWay) {
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-            default:
-                break;
+        if (nTouchPathWay > 0) {
+            var nType1 = nTouchPathWay * 10;
+            var nType2 = nTouchPathWay * 10 + 1;
+            var objShow = NoteManager.getInstance().objShow;
+            if (objShow) {
+                var arrNote1 = objShow[nType1];
+                var arrNote2 = objShow[nType2];
+                if (arrNote1 && arrNote1.length > 0) {
+                    for (var iIndex1 = 0; iIndex1 < arrNote1.length; ++iIndex1) {
+                        var curNote1 = arrNote1[iIndex1];
+                        if (this.GetScoreCheckID(curNote1) > 0) {
+                            NoteManager.getInstance().HideNote(curNote1);
+                        }
+                    }
+                }
+                if (arrNote2 && arrNote2.length > 0) {
+                    for (var iIndex2 = 0; iIndex2 < arrNote2.length; ++iIndex2) {
+                        var curNote2 = arrNote2[iIndex2];
+                        if (this.GetScoreCheckID(curNote2) > 0) {
+                            NoteManager.getInstance().HideNote(curNote2);
+                        }
+                    }
+                }
+            }
         }
+    };
+    /**
+     * 点击结束
+     */
+    GamePanel.prototype.TouchEndHandler = function () {
     };
     /**
      * 游戏点击事件
@@ -151,13 +194,18 @@ var GamePanel = (function (_super) {
     GamePanel.prototype.onGameTouch = function (event) {
         switch (event.type) {
             case egret.TouchEvent.TOUCH_BEGIN:
+                this.TouchBeginHandler(event.localX, event.localY);
                 break;
             case egret.TouchEvent.TOUCH_END:
+                this.TouchEndHandler();
                 break;
             default:
                 break;
         }
     };
+    /**
+     * 游戏滑动事件
+     */
     GamePanel.prototype.onGameTouchMove = function (event) {
         if (event.localX > 20 && event.localX < 243 && event.localY > 20 && event.localY < 71) {
         }
@@ -180,41 +228,40 @@ var GamePanel = (function (_super) {
             this._nNoteIndex++;
             var note = NoteManager.getInstance().GetNote(nTime, nPathWay, nType);
             note.scaleX = note.scaleY = 0.01;
-            note.x = this.stage.width * 19 / 48 + this.stage.width * nPathWay / 24;
-            note.y = this.stage.height * 27 / 128;
+            note.x = this.stage.stageWidth * 19 / 48 + this.stage.stageWidth * nPathWay / 24;
+            note.y = this.stage.stageHeight * 27 / 128;
             var nTargetX;
             if (nPathWay == 1) {
-                nTargetX = this.stage.width * 17 / 192 - 114;
+                nTargetX = this.stage.stageWidth * 17 / 192 - 114;
             }
             else if (nPathWay == 2) {
-                nTargetX = this.stage.width * 23 / 64 - 114;
+                nTargetX = this.stage.stageWidth * 23 / 64 - 114;
             }
             else if (nPathWay == 3) {
-                nTargetX = this.stage.width * 41 / 64 - 114;
+                nTargetX = this.stage.stageWidth * 41 / 64 - 114;
             }
             else if (nPathWay == 4) {
-                nTargetX = this.stage.width * 175 / 192 - 114;
+                nTargetX = this.stage.stageWidth * 175 / 192 - 114;
             }
             this.addChild(note);
-            egret.Tween.get(note).to({ x: nTargetX, y: this.stage.height - 42, scaleX: 1, scaleY: 1 }, GameConst.NOTE_FLY_TIME, egret.Ease.sineIn).call(this.removeNote, this, [note]);
+            egret.Tween.get(note).to({ x: nTargetX, y: this.stage.stageHeight - 42, scaleX: 1, scaleY: 1 }, GameConst.NOTE_FLY_TIME, egret.Ease.sineIn).call(this.removeNote, this, [note]);
         }
         return false;
     };
     GamePanel.prototype.removeNote = function (note) {
-        if (note && note.parent) {
-            note.parent.removeChild(note);
-        }
         NoteManager.getInstance().HideNote(note);
     };
     /**
      * 边线闪烁
      */
     GamePanel.prototype.SidelineBlink = function () {
-        if (this._bmpSideLine.alpha == 0) {
-            egret.Tween.get(this._bmpSideLine).to({ alpha: 1 }, 500).call(this.SidelineBlink, this);
-        }
-        else if (this._bmpSideLine.alpha == 1) {
-            egret.Tween.get(this._bmpSideLine).to({ alpha: 0 }, 500).call(this.SidelineBlink, this);
+        if (this._bmpSideLine) {
+            if (this._bmpSideLine.alpha == 0) {
+                egret.Tween.get(this._bmpSideLine).to({ alpha: 1 }, 500).call(this.SidelineBlink, this);
+            }
+            else if (this._bmpSideLine.alpha == 1) {
+                egret.Tween.get(this._bmpSideLine).to({ alpha: 0 }, 500).call(this.SidelineBlink, this);
+            }
         }
     };
     /**
@@ -275,14 +322,14 @@ var GamePanel = (function (_super) {
         this._bmpBg = null;
         this._bmpPerBg = null;
         this._bmpSideLine = null;
+        egret.clearTimeout(this._nTimeOutId1);
         this._mfcScene1 = null;
         this._mfcScene2 = null;
         this._mcScene = null;
+        egret.clearTimeout(this._nTimeOutId2);
         this._btnReturn = null;
         this._soundReady = null;
         this._soundGame = null;
-        this._nGameTime = 0;
-        this._nNoteIndex = 0;
         this._rectClick1 = null;
         this._rectClick2 = null;
         this._rectClick3 = null;

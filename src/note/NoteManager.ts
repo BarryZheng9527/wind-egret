@@ -21,6 +21,11 @@ class NoteManager extends egret.DisplayObject
         return this.gInstance;
     }
 
+    public get objShow()
+    {
+        return this._objShow;
+    }
+
     /**
      * 获取音符
      */
@@ -56,7 +61,7 @@ class NoteManager extends egret.DisplayObject
      */
     public ReturnNote(note:NoteItem):void
     {
-        var arrNote:any[] = this._objCache[note._nType];
+        var arrNote:any[] = this._objCache[note.nNoteType];
         arrNote.push(note);
     }
 
@@ -66,14 +71,14 @@ class NoteManager extends egret.DisplayObject
     public ShowNote(note:NoteItem):void
     {
         var arrNote:any[];
-        if (this._objShow[note._nType])
+        if (this._objShow[note.nNoteType])
         {
-            arrNote = this._objShow[note._nType];
+            arrNote = this._objShow[note.nNoteType];
         }
         else
         {
             arrNote = new Array();
-            this._objShow[note._nType] = arrNote;
+            this._objShow[note.nNoteType] = arrNote;
         }
         arrNote.push(note);
     }
@@ -83,11 +88,15 @@ class NoteManager extends egret.DisplayObject
      */
     public HideNote(note:NoteItem):void
     {
-        var arrNote:any[] = this._objShow[note._nType];
+        if (note && note.parent)
+        {
+            note.parent.removeChild(note);
+        }
+        var arrNote:any[] = this._objShow[note.nNoteType];
         for (var iIndex = 0; iIndex < arrNote.length; ++iIndex)
         {
             var curNote:NoteItem = arrNote[iIndex];
-            if (curNote._nKey = note._nKey)
+            if (curNote.nKey == note.nKey)
             {
                 arrNote.splice(iIndex, 1);
             }

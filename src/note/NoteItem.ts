@@ -2,10 +2,10 @@ class NoteItem extends egret.DisplayObjectContainer
 {
     //音符图片
     private _bmpNote:egret.Bitmap;
-    //唯一标识
-    public _nKey:number;
-    //所属存储类型
-    public _nType:number;
+    //音符时间，所属滑道，音符类型
+    private _nTime:number;
+    private _nPathWay:number;
+    private _nType:number;
 
     public constructor() 
     {
@@ -29,6 +29,21 @@ class NoteItem extends egret.DisplayObjectContainer
         this.Clear();
     }
 
+    public get nKey():number
+    {
+        return this._nTime * 100 + this._nPathWay * 10 + this._nType * 1;
+    }
+
+    public get nNoteType():number
+    {
+        return this._nPathWay * 10 + this._nType * 1;
+    }
+
+    public get nPathWay():number
+    {
+        return this._nPathWay;
+    }
+
     /**
      * 设置音符类型
      * nTime 音符产生时间
@@ -37,8 +52,9 @@ class NoteItem extends egret.DisplayObjectContainer
      */
     public SetNoteStyle(nTime:number, nPathWay:number, nType:number):void
     {
-        this._nKey = nTime * 100 + nPathWay * 10 + nType * 1;
-        this._nType = nPathWay * 10 + nType * 1;
+        this._nTime = nTime;
+        this._nPathWay = nPathWay;
+        this._nType = nType;
     }
 
     private AddNote():void
@@ -48,7 +64,7 @@ class NoteItem extends egret.DisplayObjectContainer
             this._bmpNote = new egret.Bitmap();
         }
         var texture:egret.Texture;
-        switch (this._nType)
+        switch (this.nNoteType)
         {
             case 10:
                 texture = RES.getRes("image_keyStart11_png");
