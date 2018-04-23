@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "config_born_json,sound_game_mp3,image_startBg_jpg,image_start1_png,image_start2_png,image_keyend1_png,image_keyend2_png,image_keyend3_png,image_keyend4_png,image_keyMiddle1_png,image_keyMiddle3_png,image_keyMiddle4_png,image_keyStart12_png,image_keyStart22_png,image_keyStart11_png,image_keyMiddle2_png,image_keyStart31_png,image_keyStart41_png,image_keyStart32_png,image_keyStart42_png,image_keyStart21_png,sound_start_mp3,image_gameBg_jpg,image_return_png,image_perBg_png,movie_start1_json,movie_start9_png,movie_start8_png,movie_start7_png,movie_start8_json,movie_start9_json,movie_start6_png,movie_start5_png,movie_start4_png,movie_start3_png,movie_start4_json,movie_start5_json,movie_start7_json,movie_start3_json,movie_start6_json,movie_start2_json,movie_start10_json,movie_start10_png,movie_start2_png,movie_start1_png,sound_light_mp3,sound_cheer_mp3,sound_ready_wav,movie_scene1_json,movie_scene1_png,movie_scene2_json,movie_scene2_png,movie_per_json,movie_per_png,image_sideline_png",
+			"keys": "config_born_json,sound_game_mp3,image_startBg_jpg,image_start1_png,image_start2_png,image_keyend1_png,image_keyend2_png,image_keyend3_png,image_keyend4_png,image_keyMiddle1_png,image_keyMiddle3_png,image_keyMiddle4_png,image_keyStart12_png,image_keyStart22_png,image_keyStart11_png,image_keyMiddle2_png,image_keyStart31_png,image_keyStart41_png,image_keyStart32_png,image_keyStart42_png,image_keyStart21_png,sound_start_mp3,image_gameBg_jpg,image_return_png,image_perBg_png,movie_start1_json,movie_start9_png,movie_start8_png,movie_start7_png,movie_start8_json,movie_start9_json,movie_start6_png,movie_start5_png,movie_start4_png,movie_start3_png,movie_start4_json,movie_start5_json,movie_start7_json,movie_start3_json,movie_start6_json,movie_start2_json,movie_start10_json,movie_start10_png,movie_start2_png,movie_start1_png,sound_light_mp3,sound_cheer_mp3,sound_ready_wav,movie_scene1_json,movie_scene1_png,movie_scene2_json,movie_scene2_png,movie_per_json,movie_per_png,image_sideline_png,image_great_png,image_miss_png,image_perfect_png,image_keyPress1_png,image_keyPress2_png,image_keyPress3_png,image_keyPress4_png",
 			"name": "preload"
 		}
 	],
@@ -280,6 +280,46 @@
 			"name": "image_sideline_png",
 			"type": "image",
 			"url": "image/image_sideline.png"
+		},
+		{
+			"name": "image_great_png",
+			"type": "image",
+			"url": "image/image_great.png"
+		},
+		{
+			"name": "image_miss_png",
+			"type": "image",
+			"url": "image/image_miss.png"
+		},
+		{
+			"name": "image_perfect_png",
+			"type": "image",
+			"url": "image/image_perfect.png"
+		},
+		{
+			"name": "keyPress4_png",
+			"type": "image",
+			"url": "image/keyPress4.png"
+		},
+		{
+			"name": "image_keyPress1_png",
+			"type": "image",
+			"url": "image/image_keyPress1.png"
+		},
+		{
+			"name": "image_keyPress2_png",
+			"type": "image",
+			"url": "image/image_keyPress2.png"
+		},
+		{
+			"name": "image_keyPress3_png",
+			"type": "image",
+			"url": "image/image_keyPress3.png"
+		},
+		{
+			"name": "image_keyPress4_png",
+			"type": "image",
+			"url": "image/image_keyPress4.png"
 		}
 	]
 }

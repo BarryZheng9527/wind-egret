@@ -41,7 +41,6 @@ class NoteManager extends egret.DisplayObject
         else
         {
             arrNote = new Array();
-            this._objCache[type] = arrNote;
         }
         if (arrNote.length > 0)
         {
@@ -51,6 +50,7 @@ class NoteManager extends egret.DisplayObject
         {
             note = new NoteItem();
         }
+        this._objCache[type] = arrNote;
         note.SetNoteStyle(nTime, nPathWay, nType);
         this.ShowNote(note);
         return note;
@@ -63,6 +63,7 @@ class NoteManager extends egret.DisplayObject
     {
         var arrNote:any[] = this._objCache[note.nNoteType];
         arrNote.push(note);
+        this._objCache[note.nNoteType] = arrNote;
     }
 
     /**
@@ -78,9 +79,9 @@ class NoteManager extends egret.DisplayObject
         else
         {
             arrNote = new Array();
-            this._objShow[note.nNoteType] = arrNote;
         }
         arrNote.push(note);
+        this._objShow[note.nNoteType] = arrNote;
     }
 
     /**
@@ -88,10 +89,6 @@ class NoteManager extends egret.DisplayObject
      */
     public HideNote(note:NoteItem):void
     {
-        if (note && note.parent)
-        {
-            note.parent.removeChild(note);
-        }
         var arrNote:any[] = this._objShow[note.nNoteType];
         for (var iIndex = 0; iIndex < arrNote.length; ++iIndex)
         {
@@ -99,9 +96,15 @@ class NoteManager extends egret.DisplayObject
             if (curNote.nKey == note.nKey)
             {
                 arrNote.splice(iIndex, 1);
+                this.ReturnNote(note);
+                break;
             }
         }
-        this.ReturnNote(note);
+        this._objShow[note.nNoteType] = arrNote;
+        if (note && note.parent)
+        {
+            note.parent.removeChild(note);
+        }
     }
 
     /**
@@ -122,6 +125,7 @@ class NoteManager extends egret.DisplayObject
                 }
             }
             arrNote = new Array();
+            this._objShow[key] = arrNote;
         }
     }
 }

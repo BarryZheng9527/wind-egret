@@ -1,8 +1,17 @@
 class GamePanel extends egret.DisplayObjectContainer
 {
+    //容器层次
+    private _LayerScene:egret.DisplayObjectContainer;
+    private _LayerNote:egret.DisplayObjectContainer;
+    private _LayerUI:egret.DisplayObjectContainer;
     //背景图
     private _bmpBg:egret.Bitmap;
     private _bmpPerBg:egret.Bitmap;
+    //按键选中
+    private _bmpPerPress1:egret.Bitmap;
+    private _bmpPerPress2:egret.Bitmap;
+    private _bmpPerPress3:egret.Bitmap;
+    private _bmpPerPress4:egret.Bitmap;
     //闪烁边线
     private _bmpSideLine:egret.Bitmap;
     private _nTimeOutId1:number;
@@ -11,6 +20,19 @@ class GamePanel extends egret.DisplayObjectContainer
     private _mfcScene2:egret.MovieClipDataFactory;
     private _mcScene:egret.MovieClip;
     private _nTimeOutId2:number;
+    //点击特效
+    private _mfcPer:egret.MovieClipDataFactory;
+    private _mcPer1:egret.MovieClip;
+    private _mcPer2:egret.MovieClip;
+    private _mcPer3:egret.MovieClip;
+    private _mcPer4:egret.MovieClip;
+    //判定显示
+    private _bmpPerfect:egret.Bitmap;
+    private _bmpGreat:egret.Bitmap;
+    private _bmpMiss:egret.Bitmap;
+    //音符统计
+    private _textPerNum:egret.TextField;
+    private _nPerNum:number;
     //返回按钮
     private _btnReturn:MyButton;
     //准备音效
@@ -76,6 +98,7 @@ class GamePanel extends egret.DisplayObjectContainer
      */
     private InitData():void
     {
+        this._nPerNum = 0;
         this._nGameTime = 0;
         this._nTimeFlag = 0;
         this._nNoteIndex = 0;
@@ -90,6 +113,22 @@ class GamePanel extends egret.DisplayObjectContainer
      */
     private UpdateShow():void
     {
+        //容器层次
+        if (!this._LayerScene)
+        {
+            this._LayerScene = new egret.DisplayObjectContainer();
+        }
+        this.addChild(this._LayerScene);
+        if (!this._LayerNote)
+        {
+            this._LayerNote = new egret.DisplayObjectContainer();
+        }
+        this.addChild(this._LayerNote);
+        if (!this._LayerUI)
+        {
+            this._LayerUI = new egret.DisplayObjectContainer();
+        }
+        this.addChild(this._LayerUI);
         //背景图
         if (!this._bmpBg)
         {
@@ -97,7 +136,7 @@ class GamePanel extends egret.DisplayObjectContainer
         }
         var texture:egret.Texture = RES.getRes("image_gameBg_jpg");
         this._bmpBg.texture = texture;
-        this.addChild(this._bmpBg);
+        this._LayerScene.addChild(this._bmpBg);
         if (!this._bmpPerBg)
         {
             this._bmpPerBg = new egret.Bitmap();
@@ -105,7 +144,48 @@ class GamePanel extends egret.DisplayObjectContainer
         var texture2:egret.Texture = RES.getRes("image_perBg_png");
         this._bmpPerBg.texture = texture2;
         this._bmpPerBg.y = this.stage.stageHeight - 543;
-        this.addChild(this._bmpPerBg);
+        this._LayerScene.addChild(this._bmpPerBg);
+        //按键选中
+        if (!this._bmpPerPress1)
+        {
+            this._bmpPerPress1 = new egret.Bitmap();
+        }
+        var texture7:egret.Texture = RES.getRes("image_keyPress1_png");
+        this._bmpPerPress1.texture = texture7;
+        this._bmpPerPress1.x = this.stage.stageWidth * 29 / 192 - this._bmpPerPress1.width / 2;
+        this._bmpPerPress1.y = this.stage.stageHeight * 55 / 64 - this._bmpPerPress1.height / 2;
+        this._bmpPerPress1.visible = false;
+        this._LayerScene.addChild(this._bmpPerPress1);
+        if (!this._bmpPerPress2)
+        {
+            this._bmpPerPress2 = new egret.Bitmap();
+        }
+        var texture8:egret.Texture = RES.getRes("image_keyPress2_png");
+        this._bmpPerPress2.texture = texture8;
+        this._bmpPerPress2.x = this.stage.stageWidth * 73 / 192 - this._bmpPerPress2.width / 2;
+        this._bmpPerPress2.y = this.stage.stageHeight * 55 / 64 - this._bmpPerPress2.height / 2;
+        this._bmpPerPress2.visible = false;
+        this._LayerScene.addChild(this._bmpPerPress2);
+        if (!this._bmpPerPress3)
+        {
+            this._bmpPerPress3 = new egret.Bitmap();
+        }
+        var texture9:egret.Texture = RES.getRes("image_keyPress3_png");
+        this._bmpPerPress3.texture = texture9;
+        this._bmpPerPress3.x = this.stage.stageWidth * 119 / 192 - this._bmpPerPress3.width / 2;
+        this._bmpPerPress3.y = this.stage.stageHeight * 55 / 64 - this._bmpPerPress3.height / 2;
+        this._bmpPerPress3.visible = false;
+        this._LayerScene.addChild(this._bmpPerPress3);
+        if (!this._bmpPerPress4)
+        {
+            this._bmpPerPress4 = new egret.Bitmap();
+        }
+        var texture10:egret.Texture = RES.getRes("image_keyPress4_png");
+        this._bmpPerPress4.texture = texture10;
+        this._bmpPerPress4.x = this.stage.stageWidth * 163 / 192 - this._bmpPerPress4.width / 2;
+        this._bmpPerPress4.y = this.stage.stageHeight * 55 / 64 - this._bmpPerPress4.height / 2;
+        this._bmpPerPress4.visible = false;
+        this._LayerScene.addChild(this._bmpPerPress4);
         //点击和判定区域
         this._rectClick1 = new egret.Rectangle(0, this.stage.stageHeight * 3 / 4, this.stage.stageWidth * 55 / 192, this.stage.stageHeight / 4);
         this._rectClick2 = new egret.Rectangle(this.stage.stageWidth * 55 / 192, this.stage.stageHeight * 3 / 4, this.stage.stageWidth * 41 / 192, this.stage.stageHeight / 4);
@@ -124,16 +204,82 @@ class GamePanel extends egret.DisplayObjectContainer
         this._bmpSideLine.x = (this.stage.stageWidth - this._bmpSideLine.width) / 2;
         this._bmpSideLine.y = (this.stage.stageHeight - this._bmpSideLine.height) / 2;
         this._bmpSideLine.alpha = 0;
-        this.addChild(this._bmpSideLine);
+        this._LayerScene.addChild(this._bmpSideLine);
         this._nTimeOutId1 = egret.setTimeout(this.SidelineBlink, this, 4000);
         //场景特效
         this._mfcScene1 = new egret.MovieClipDataFactory(RES.getRes("movie_scene1_json"), RES.getRes("movie_scene1_png"));
         this._mfcScene2 = new egret.MovieClipDataFactory(RES.getRes("movie_scene2_json"), RES.getRes("movie_scene2_png"));
         this._mcScene = new egret.MovieClip(this._mfcScene1.generateMovieClipData("scene1"));
         this._mcScene.addEventListener(egret.Event.COMPLETE, this.onSceneMcComplete, this);
-        this.addChild(this._mcScene);
+        this._LayerScene.addChild(this._mcScene);
         this._mcScene.visible = false;
         this._nTimeOutId2 = egret.setTimeout(function(){this._mcScene.visible = true;this._mcScene.play(1);}, this, 4000);
+        //按键特效
+        this._mfcPer = new egret.MovieClipDataFactory(RES.getRes("movie_per_json"), RES.getRes("movie_per_png"));
+        this._mcPer1 = new egret.MovieClip(this._mfcPer.generateMovieClipData("per"));
+        this._mcPer1.addEventListener(egret.Event.COMPLETE, this.onPerMcComplete1, this);
+        this._mcPer1.x = this.stage.stageWidth * 29 / 192 - 125;
+        this._mcPer1.y = this.stage.stageHeight * 55 / 64 - 75;
+        this._LayerUI.addChild(this._mcPer1);
+        this._mcPer1.stop();
+        this._mcPer1.visible = false;
+        this._mcPer2 = new egret.MovieClip(this._mfcPer.generateMovieClipData("per"));
+        this._mcPer2.addEventListener(egret.Event.COMPLETE, this.onPerMcComplete2, this);
+        this._mcPer2.x = this.stage.stageWidth * 73 / 192 - 125;
+        this._mcPer2.y = this.stage.stageHeight * 55 / 64 - 75;
+        this._LayerUI.addChild(this._mcPer2);
+        this._mcPer2.stop();
+        this._mcPer2.visible = false;
+        this._mcPer3 = new egret.MovieClip(this._mfcPer.generateMovieClipData("per"));
+        this._mcPer3.addEventListener(egret.Event.COMPLETE, this.onPerMcComplete3, this);
+        this._mcPer3.x = this.stage.stageWidth * 119 / 192 - 125;
+        this._mcPer3.y = this.stage.stageHeight * 55 / 64 - 75;
+        this._LayerUI.addChild(this._mcPer3);
+        this._mcPer3.stop();
+        this._mcPer3.visible = false;
+        this._mcPer4 = new egret.MovieClip(this._mfcPer.generateMovieClipData("per"));
+        this._mcPer4.addEventListener(egret.Event.COMPLETE, this.onPerMcComplete4, this);
+        this._mcPer4.x = this.stage.stageWidth * 163 / 192 - 125;
+        this._mcPer4.y = this.stage.stageHeight * 55 / 64 - 75;
+        this._LayerUI.addChild(this._mcPer4);
+        this._mcPer4.stop();
+        this._mcPer4.visible = false;
+        //判定显示
+        if (!this._bmpPerfect)
+        {
+            this._bmpPerfect = new egret.Bitmap();
+        }
+        var texture4:egret.Texture = RES.getRes("image_perfect_png");
+        this._bmpPerfect.texture = texture4;
+        this._bmpPerfect.visible = false;
+        this._LayerUI.addChild(this._bmpPerfect);
+        if (!this._bmpGreat)
+        {
+            this._bmpGreat = new egret.Bitmap();
+        }
+        var texture5:egret.Texture = RES.getRes("image_great_png");
+        this._bmpGreat.texture = texture5;
+        this._bmpGreat.visible = false;
+        this._LayerUI.addChild(this._bmpGreat);
+        if (!this._bmpMiss)
+        {
+            this._bmpMiss = new egret.Bitmap();
+        }
+        var texture6:egret.Texture = RES.getRes("image_miss_png");
+        this._bmpMiss.texture = texture6;
+        this._bmpMiss.visible = false;
+        this._LayerUI.addChild(this._bmpMiss);
+        //音符统计
+        if (!this._textPerNum)
+        {
+            this._textPerNum = new egret.TextField();
+        }
+        this._textPerNum.size = 60;
+        this._textPerNum.bold = true;
+        this._textPerNum.textColor = 0xffff00;
+        this._textPerNum.x = this.stage.stageWidth - 180;
+        this._textPerNum.y = 80;
+        this._LayerUI.addChild(this._textPerNum);
         //返回按钮
         if (!this._btnReturn)
         {
@@ -141,7 +287,7 @@ class GamePanel extends egret.DisplayObjectContainer
         }
         this._btnReturn.SetResource("image_return_png", "image_return_png", this.onReturnTouch);
         this._btnReturn.x = this.stage.stageWidth - this._btnReturn.width;
-        this.addChild(this._btnReturn);
+        this._LayerUI.addChild(this._btnReturn);
         //播放准备音效
         if (!this._soundReady)
         {
@@ -205,8 +351,82 @@ class GamePanel extends egret.DisplayObjectContainer
             {
                 nCheckId = 3;
             }
+            if (nCheckId > 0)
+            {
+                NoteManager.getInstance().HideNote(note);
+                this.PlayPerMc(note.nPathWay);
+            }
+        }
+        if (nCheckId > 0)
+        {
+            this.ShowScoreCheck(nCheckId);
         }
         return nCheckId;
+    }
+
+    /**
+     * 判定显示
+     */
+    private ShowScoreCheck(nCheckId:number):void
+    {
+        var bmp:egret.Bitmap;
+        if (nCheckId == 1)
+        {
+            bmp = this._bmpPerfect;
+        }
+        else if (nCheckId == 2)
+        {
+            bmp = this._bmpGreat;
+        }
+        else if (nCheckId == 3)
+        {
+            bmp = this._bmpMiss;
+        }
+        if (bmp)
+        {
+            bmp.x = (this.stage.stageWidth - bmp.width) / 2;
+            bmp.y = this.stage.stageHeight * 23 / 128 - bmp.height / 2;
+            bmp.scaleX = bmp.scaleY = 1;
+            bmp.visible = true;
+            var nTarX:number = bmp.x + bmp.width * 9 / 20;
+            var nTarY:number = bmp.y + bmp.height * 9 / 20;
+            egret.Tween.get(bmp).to({x:nTarX, y:nTarY, scaleX:0.1, scaleY:0.1}, 200).call(this.removeScoreCheck, this, [bmp]);
+        }
+        this._nPerNum ++;
+        this._textPerNum.text = "" + this._nPerNum;
+    }
+
+    private removeScoreCheck(bmp:egret.Bitmap):void
+    {
+        bmp.visible = false;
+    }
+
+    /**
+     * 点击特效
+     */
+    private PlayPerMc(nPer:number):void
+    {
+        switch (Math.floor(nPer))
+        {
+            case 1:
+                this._mcPer1.visible = true;
+                this._mcPer1.gotoAndPlay(1, 1);
+                break;
+            case 2:
+                this._mcPer2.visible = true;
+                this._mcPer2.gotoAndPlay(1, 1);
+                break;
+            case 3:
+                this._mcPer3.visible = true;
+                this._mcPer3.gotoAndPlay(1, 1);
+                break;
+            case 4:
+                this._mcPer4.visible = true;
+                this._mcPer4.gotoAndPlay(1, 1);
+                break;
+            default:
+                break;
+        }
     }
 
     /**
@@ -228,10 +448,7 @@ class GamePanel extends egret.DisplayObjectContainer
                     for (var iIndex1 = 0; iIndex1 < arrNote1.length; ++iIndex1)
                     {
                         var curNote1:NoteItem = arrNote1[iIndex1];
-                        if (this.GetScoreCheckID(curNote1) > 0)
-                        {
-                            NoteManager.getInstance().HideNote(curNote1);
-                        }
+                        this.GetScoreCheckID(curNote1);
                     }
                 }
                 if (arrNote2 && arrNote2.length > 0)
@@ -239,10 +456,7 @@ class GamePanel extends egret.DisplayObjectContainer
                     for (var iIndex2 = 0; iIndex2 < arrNote2.length; ++iIndex2)
                     {
                         var curNote2:NoteItem = arrNote2[iIndex2];
-                        if (this.GetScoreCheckID(curNote2) > 0)
-                        {
-                            NoteManager.getInstance().HideNote(curNote2);
-                        }
+                        this.GetScoreCheckID(curNote2);
                     }
                 }
             }
@@ -250,15 +464,19 @@ class GamePanel extends egret.DisplayObjectContainer
             {
                 case 1:
                     this._bPerDown1 = true;
+                    this._bmpPerPress1.visible = true;
                     break;
                 case 2:
                     this._bPerDown2 = true;
+                    this._bmpPerPress2.visible = true;
                     break;
                 case 3:
                     this._bPerDown3 = true;
+                    this._bmpPerPress3.visible = true;
                     break;
                 case 4:
                     this._bPerDown4 = true;
+                    this._bmpPerPress4.visible = true;
                     break;
                 default:
                     break;
@@ -283,9 +501,10 @@ class GamePanel extends egret.DisplayObjectContainer
                     for (var iIndex11 = 0; iIndex11 < arrNote11.length; ++iIndex11)
                     {
                         var curNote11:NoteItem = arrNote11[iIndex11];
-                        if (this.GetScoreCheckID(curNote11) == 1)
+                        var nNoteY11:number = curNote11.height * curNote11.scaleY / 2 + curNote11.y;
+                        if (nNoteY11 >= this._rectPerfect.top && nNoteY11 <= this._rectPerfect.bottom)
                         {
-                            NoteManager.getInstance().HideNote(curNote11);
+                            this.GetScoreCheckID(curNote11);
                         }
                     }
                 }
@@ -294,9 +513,10 @@ class GamePanel extends egret.DisplayObjectContainer
                     for (var iIndex12 = 0; iIndex12 < arrNote12.length; ++iIndex12)
                     {
                         var curNote12:NoteItem = arrNote12[iIndex12];
-                        if (this.GetScoreCheckID(curNote12) == 1)
+                        var nNoteY12:number = curNote12.height * curNote12.scaleY / 2 + curNote12.y;
+                        if (nNoteY12 >= this._rectPerfect.top && nNoteY12 <= this._rectPerfect.bottom)
                         {
-                            NoteManager.getInstance().HideNote(curNote12);
+                            this.GetScoreCheckID(curNote12);
                         }
                     }
                 }
@@ -310,9 +530,10 @@ class GamePanel extends egret.DisplayObjectContainer
                     for (var iIndex21 = 0; iIndex21 < arrNote21.length; ++iIndex21)
                     {
                         var curNote21:NoteItem = arrNote21[iIndex21];
-                        if (this.GetScoreCheckID(curNote21) == 1)
+                        var nNoteY21:number = curNote21.height * curNote21.scaleY / 2 + curNote21.y;
+                        if (nNoteY21 >= this._rectPerfect.top && nNoteY21 <= this._rectPerfect.bottom)
                         {
-                            NoteManager.getInstance().HideNote(curNote21);
+                            this.GetScoreCheckID(curNote21);
                         }
                     }
                 }
@@ -321,9 +542,10 @@ class GamePanel extends egret.DisplayObjectContainer
                     for (var iIndex22 = 0; iIndex22 < arrNote22.length; ++iIndex22)
                     {
                         var curNote22:NoteItem = arrNote22[iIndex22];
-                        if (this.GetScoreCheckID(curNote22) == 1)
+                        var nNoteY22:number = curNote22.height * curNote22.scaleY / 2 + curNote22.y;
+                        if (nNoteY22 >= this._rectPerfect.top && nNoteY22 <= this._rectPerfect.bottom)
                         {
-                            NoteManager.getInstance().HideNote(curNote22);
+                            this.GetScoreCheckID(curNote22);
                         }
                     }
                 }
@@ -337,9 +559,10 @@ class GamePanel extends egret.DisplayObjectContainer
                     for (var iIndex31 = 0; iIndex31 < arrNote31.length; ++iIndex31)
                     {
                         var curNote31:NoteItem = arrNote31[iIndex31];
-                        if (this.GetScoreCheckID(curNote31) == 1)
+                        var nNoteY31:number = curNote31.height * curNote31.scaleY / 2 + curNote31.y;
+                        if (nNoteY31 >= this._rectPerfect.top && nNoteY31 <= this._rectPerfect.bottom)
                         {
-                            NoteManager.getInstance().HideNote(curNote31);
+                            this.GetScoreCheckID(curNote31);
                         }
                     }
                 }
@@ -348,9 +571,10 @@ class GamePanel extends egret.DisplayObjectContainer
                     for (var iIndex32 = 0; iIndex32 < arrNote32.length; ++iIndex32)
                     {
                         var curNote32:NoteItem = arrNote32[iIndex32];
-                        if (this.GetScoreCheckID(curNote32) == 1)
+                        var nNoteY32:number = curNote32.height * curNote32.scaleY / 2 + curNote32.y;
+                        if (nNoteY32 >= this._rectPerfect.top && nNoteY32 <= this._rectPerfect.bottom)
                         {
-                            NoteManager.getInstance().HideNote(curNote32);
+                            this.GetScoreCheckID(curNote32);
                         }
                     }
                 }
@@ -364,9 +588,10 @@ class GamePanel extends egret.DisplayObjectContainer
                     for (var iIndex41 = 0; iIndex41 < arrNote41.length; ++iIndex41)
                     {
                         var curNote41:NoteItem = arrNote41[iIndex41];
-                        if (this.GetScoreCheckID(curNote41) == 1)
+                        var nNoteY41:number = curNote41.height * curNote41.scaleY / 2 + curNote41.y;
+                        if (nNoteY41 >= this._rectPerfect.top && nNoteY41 <= this._rectPerfect.bottom)
                         {
-                            NoteManager.getInstance().HideNote(curNote41);
+                            this.GetScoreCheckID(curNote41);
                         }
                     }
                 }
@@ -375,9 +600,10 @@ class GamePanel extends egret.DisplayObjectContainer
                     for (var iIndex42 = 0; iIndex42 < arrNote42.length; ++iIndex42)
                     {
                         var curNote42:NoteItem = arrNote42[iIndex42];
-                        if (this.GetScoreCheckID(curNote42) == 1)
+                        var nNoteY42:number = curNote42.height * curNote42.scaleY / 2 + curNote42.y;
+                        if (nNoteY42 >= this._rectPerfect.top && nNoteY42 <= this._rectPerfect.bottom)
                         {
-                            NoteManager.getInstance().HideNote(curNote42);
+                            this.GetScoreCheckID(curNote42);
                         }
                     }
                 }
@@ -393,16 +619,20 @@ class GamePanel extends egret.DisplayObjectContainer
         switch (nTouchPathWay)
         {
             case 1:
-                this._bPerDown1 = true;
+                this._bPerDown1 = false;
+                this._bmpPerPress1.visible = false;
                 break;
             case 2:
-                this._bPerDown2 = true;
+                this._bPerDown2 = false;
+                this._bmpPerPress2.visible = false;
                 break;
             case 3:
-                this._bPerDown3 = true;
+                this._bPerDown3 = false;
+                this._bmpPerPress3.visible = false;
                 break;
             case 4:
-                this._bPerDown4 = true;
+                this._bPerDown4 = false;
+                this._bmpPerPress4.visible = false;
                 break;
             default:
                 break;
@@ -434,10 +664,6 @@ class GamePanel extends egret.DisplayObjectContainer
      */
     private onGameTouchMove(event:egret.TouchEvent)
     {
-        this._bPerDown1 = false;
-        this._bPerDown2 = false;
-        this._bPerDown3 = false;
-        this._bPerDown4 = false;
         if (event.localX > 20 && event.localX < this.stage.stageWidth - 20 && event.localY > this.stage.stageHeight * 3/ 4 && event.localY < this.stage.stageHeight - 20)
         {
             var nPerDownType:number = this.GetTouchPathWay(event.localX, event.localY);
@@ -445,18 +671,117 @@ class GamePanel extends egret.DisplayObjectContainer
             {
                 case 1:
                     this._bPerDown1 = true;
+                    if (!this._bPerDown1)
+                    {
+                        this._bmpPerPress1.visible = true;
+                    }
+                    if (this._bPerDown2)
+                    {
+                        this._bPerDown2 = false;
+                        this._bmpPerPress2.visible = false;
+                    }
+                    if (this._bPerDown3)
+                    {
+                        this._bPerDown3 = false;
+                        this._bmpPerPress3.visible = false;
+                    }
+                    if (this._bPerDown4)
+                    {
+                        this._bPerDown4 = false;
+                        this._bmpPerPress4.visible = false;
+                    }
                     break;
                 case 2:
                     this._bPerDown2 = true;
+                    if (!this._bPerDown2)
+                    {
+                        this._bmpPerPress2.visible = true;
+                    }
+                    if (this._bPerDown1)
+                    {
+                        this._bPerDown1 = false;
+                        this._bmpPerPress1.visible = false;
+                    }
+                    if (this._bPerDown3)
+                    {
+                        this._bPerDown3 = false;
+                        this._bmpPerPress3.visible = false;
+                    }
+                    if (this._bPerDown4)
+                    {
+                        this._bPerDown4 = false;
+                        this._bmpPerPress4.visible = false;
+                    }
                     break;
                 case 3:
                     this._bPerDown3 = true;
+                    if (!this._bPerDown3)
+                    {
+                        this._bmpPerPress3.visible = true;
+                    }
+                    if (this._bPerDown1)
+                    {
+                        this._bPerDown1 = false;
+                        this._bmpPerPress1.visible = false;
+                    }
+                    if (this._bPerDown2)
+                    {
+                        this._bPerDown2 = false;
+                        this._bmpPerPress2.visible = false;
+                    }
+                    if (this._bPerDown4)
+                    {
+                        this._bPerDown4 = false;
+                        this._bmpPerPress4.visible = false;
+                    }
                     break;
                 case 4:
                     this._bPerDown4 = true;
+                    if (!this._bPerDown4)
+                    {
+                        this._bmpPerPress4.visible = true;
+                    }
+                    if (this._bPerDown1)
+                    {
+                        this._bPerDown1 = false;
+                        this._bmpPerPress1.visible = false;
+                    }
+                    if (this._bPerDown2)
+                    {
+                        this._bPerDown2 = false;
+                        this._bmpPerPress2.visible = false;
+                    }
+                    if (this._bPerDown3)
+                    {
+                        this._bPerDown3 = false;
+                        this._bmpPerPress3.visible = false;
+                    }
                     break;
                 default:
                     break;
+            }
+        }
+        else
+        {
+            if (this._bPerDown1)
+            {
+                this._bPerDown1 = false;
+                this._bmpPerPress1.visible = false;
+            }
+            if (this._bPerDown2)
+            {
+                this._bPerDown2 = false;
+                this._bmpPerPress2.visible = false;
+            }
+            if (this._bPerDown3)
+            {
+                this._bPerDown3 = false;
+                this._bmpPerPress3.visible = false;
+            }
+            if (this._bPerDown4)
+            {
+                this._bPerDown4 = false;
+                this._bmpPerPress4.visible = false;
             }
         }
     }
@@ -499,7 +824,7 @@ class GamePanel extends egret.DisplayObjectContainer
             {
                 nTargetX = this.stage.stageWidth * 175 / 192 - 114;
             }
-            this.addChild(note);
+            this._LayerNote.addChild(note);
             egret.Tween.get(note).to({x:nTargetX, y:this.stage.stageHeight - 42, scaleX:1, scaleY:1}, GameConst.NOTE_FLY_TIME, egret.Ease.sineIn).call(this.removeNote, this, [note]);
         }
 
@@ -510,7 +835,11 @@ class GamePanel extends egret.DisplayObjectContainer
 
     private removeNote(note:NoteItem):void
     {
-        NoteManager.getInstance().HideNote(note);
+        if (note && note.parent)
+        {
+            NoteManager.getInstance().HideNote(note);
+            this.ShowScoreCheck(3);
+        }
     }
 
     /**
@@ -550,6 +879,33 @@ class GamePanel extends egret.DisplayObjectContainer
             default:
                 break;
         }
+    }
+
+    /**
+     * 点击特效播放完毕
+     */
+    private onPerMcComplete1(event:egret.Event):void
+    {
+        this._mcPer1.stop();
+        this._mcPer1.visible = false;
+    }
+
+    private onPerMcComplete2(event:egret.Event):void
+    {
+        this._mcPer2.stop();
+        this._mcPer2.visible = false;
+    }
+
+    private onPerMcComplete3(event:egret.Event):void
+    {
+        this._mcPer3.stop();
+        this._mcPer3.visible = false;
+    }
+
+    private onPerMcComplete4(event:egret.Event):void
+    {
+        this._mcPer4.stop();
+        this._mcPer4.visible = false;
     }
 
     /**
@@ -596,16 +952,56 @@ class GamePanel extends egret.DisplayObjectContainer
             this._channelGame.stop();
             this._channelGame = null;
         }
+        this._mcPer1.stop();
+        this._mcPer1.removeEventListener(egret.Event.COMPLETE, this.onPerMcComplete1, this);
+        if (this._mcPer1 && this._mcPer1.parent)
+        {
+            this._mcPer1.parent.removeChild(this._mcPer1);
+        }
+        this._mcPer2.stop();
+        this._mcPer2.removeEventListener(egret.Event.COMPLETE, this.onPerMcComplete2, this);
+        if (this._mcPer2 && this._mcPer2.parent)
+        {
+            this._mcPer2.parent.removeChild(this._mcPer2);
+        }
+        this._mcPer3.stop();
+        this._mcPer3.removeEventListener(egret.Event.COMPLETE, this.onPerMcComplete3, this);
+        if (this._mcPer3 && this._mcPer3.parent)
+        {
+            this._mcPer3.parent.removeChild(this._mcPer3);
+        }
+        this._mcPer4.stop();
+        this._mcPer4.removeEventListener(egret.Event.COMPLETE, this.onPerMcComplete4, this);
+        if (this._mcPer4 && this._mcPer4.parent)
+        {
+            this._mcPer4.parent.removeChild(this._mcPer4);
+        }
         egret.stopTick(this.timerFunc, this);
         NoteManager.getInstance().HideAllNote();
+        this._LayerScene = null;
+        this._LayerNote = null;
+        this._LayerUI = null;
         this._bmpBg = null;
         this._bmpPerBg = null;
+        this._bmpPerPress1 = null;
+        this._bmpPerPress2 = null;
+        this._bmpPerPress3 = null;
+        this._bmpPerPress4 = null;
         this._bmpSideLine = null;
         egret.clearTimeout(this._nTimeOutId1);
         this._mfcScene1 = null;
         this._mfcScene2 = null;
         this._mcScene = null;
+        this._mfcPer = null;
+        this._mcPer1 = null;
+        this._mcPer2 = null;
+        this._mcPer3 = null;
+        this._mcPer4 = null;
         egret.clearTimeout(this._nTimeOutId2);
+        this._bmpPerfect = null;
+        this._bmpGreat = null;
+        this._bmpMiss = null;
+        this._textPerNum = null;
         this._btnReturn = null;
         this._soundReady = null;
         this._soundGame = null;

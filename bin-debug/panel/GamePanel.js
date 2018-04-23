@@ -40,6 +40,7 @@ var GamePanel = (function (_super) {
      * 显示数据初始化
      */
     GamePanel.prototype.InitData = function () {
+        this._nPerNum = 0;
         this._nGameTime = 0;
         this._nTimeFlag = 0;
         this._nNoteIndex = 0;
@@ -52,20 +53,70 @@ var GamePanel = (function (_super) {
      * 更新显示
      */
     GamePanel.prototype.UpdateShow = function () {
+        //容器层次
+        if (!this._LayerScene) {
+            this._LayerScene = new egret.DisplayObjectContainer();
+        }
+        this.addChild(this._LayerScene);
+        if (!this._LayerNote) {
+            this._LayerNote = new egret.DisplayObjectContainer();
+        }
+        this.addChild(this._LayerNote);
+        if (!this._LayerUI) {
+            this._LayerUI = new egret.DisplayObjectContainer();
+        }
+        this.addChild(this._LayerUI);
         //背景图
         if (!this._bmpBg) {
             this._bmpBg = new egret.Bitmap();
         }
         var texture = RES.getRes("image_gameBg_jpg");
         this._bmpBg.texture = texture;
-        this.addChild(this._bmpBg);
+        this._LayerScene.addChild(this._bmpBg);
         if (!this._bmpPerBg) {
             this._bmpPerBg = new egret.Bitmap();
         }
         var texture2 = RES.getRes("image_perBg_png");
         this._bmpPerBg.texture = texture2;
         this._bmpPerBg.y = this.stage.stageHeight - 543;
-        this.addChild(this._bmpPerBg);
+        this._LayerScene.addChild(this._bmpPerBg);
+        //按键选中
+        if (!this._bmpPerPress1) {
+            this._bmpPerPress1 = new egret.Bitmap();
+        }
+        var texture7 = RES.getRes("image_keyPress1_png");
+        this._bmpPerPress1.texture = texture7;
+        this._bmpPerPress1.x = this.stage.stageWidth * 29 / 192 - this._bmpPerPress1.width / 2;
+        this._bmpPerPress1.y = this.stage.stageHeight * 55 / 64 - this._bmpPerPress1.height / 2;
+        this._bmpPerPress1.visible = false;
+        this._LayerScene.addChild(this._bmpPerPress1);
+        if (!this._bmpPerPress2) {
+            this._bmpPerPress2 = new egret.Bitmap();
+        }
+        var texture8 = RES.getRes("image_keyPress2_png");
+        this._bmpPerPress2.texture = texture8;
+        this._bmpPerPress2.x = this.stage.stageWidth * 73 / 192 - this._bmpPerPress2.width / 2;
+        this._bmpPerPress2.y = this.stage.stageHeight * 55 / 64 - this._bmpPerPress2.height / 2;
+        this._bmpPerPress2.visible = false;
+        this._LayerScene.addChild(this._bmpPerPress2);
+        if (!this._bmpPerPress3) {
+            this._bmpPerPress3 = new egret.Bitmap();
+        }
+        var texture9 = RES.getRes("image_keyPress3_png");
+        this._bmpPerPress3.texture = texture9;
+        this._bmpPerPress3.x = this.stage.stageWidth * 119 / 192 - this._bmpPerPress3.width / 2;
+        this._bmpPerPress3.y = this.stage.stageHeight * 55 / 64 - this._bmpPerPress3.height / 2;
+        this._bmpPerPress3.visible = false;
+        this._LayerScene.addChild(this._bmpPerPress3);
+        if (!this._bmpPerPress4) {
+            this._bmpPerPress4 = new egret.Bitmap();
+        }
+        var texture10 = RES.getRes("image_keyPress4_png");
+        this._bmpPerPress4.texture = texture10;
+        this._bmpPerPress4.x = this.stage.stageWidth * 163 / 192 - this._bmpPerPress4.width / 2;
+        this._bmpPerPress4.y = this.stage.stageHeight * 55 / 64 - this._bmpPerPress4.height / 2;
+        this._bmpPerPress4.visible = false;
+        this._LayerScene.addChild(this._bmpPerPress4);
         //点击和判定区域
         this._rectClick1 = new egret.Rectangle(0, this.stage.stageHeight * 3 / 4, this.stage.stageWidth * 55 / 192, this.stage.stageHeight / 4);
         this._rectClick2 = new egret.Rectangle(this.stage.stageWidth * 55 / 192, this.stage.stageHeight * 3 / 4, this.stage.stageWidth * 41 / 192, this.stage.stageHeight / 4);
@@ -83,23 +134,85 @@ var GamePanel = (function (_super) {
         this._bmpSideLine.x = (this.stage.stageWidth - this._bmpSideLine.width) / 2;
         this._bmpSideLine.y = (this.stage.stageHeight - this._bmpSideLine.height) / 2;
         this._bmpSideLine.alpha = 0;
-        this.addChild(this._bmpSideLine);
+        this._LayerScene.addChild(this._bmpSideLine);
         this._nTimeOutId1 = egret.setTimeout(this.SidelineBlink, this, 4000);
         //场景特效
         this._mfcScene1 = new egret.MovieClipDataFactory(RES.getRes("movie_scene1_json"), RES.getRes("movie_scene1_png"));
         this._mfcScene2 = new egret.MovieClipDataFactory(RES.getRes("movie_scene2_json"), RES.getRes("movie_scene2_png"));
         this._mcScene = new egret.MovieClip(this._mfcScene1.generateMovieClipData("scene1"));
         this._mcScene.addEventListener(egret.Event.COMPLETE, this.onSceneMcComplete, this);
-        this.addChild(this._mcScene);
+        this._LayerScene.addChild(this._mcScene);
         this._mcScene.visible = false;
         this._nTimeOutId2 = egret.setTimeout(function () { this._mcScene.visible = true; this._mcScene.play(1); }, this, 4000);
+        //按键特效
+        this._mfcPer = new egret.MovieClipDataFactory(RES.getRes("movie_per_json"), RES.getRes("movie_per_png"));
+        this._mcPer1 = new egret.MovieClip(this._mfcPer.generateMovieClipData("per"));
+        this._mcPer1.addEventListener(egret.Event.COMPLETE, this.onPerMcComplete1, this);
+        this._mcPer1.x = this.stage.stageWidth * 29 / 192 - 125;
+        this._mcPer1.y = this.stage.stageHeight * 55 / 64 - 75;
+        this._LayerUI.addChild(this._mcPer1);
+        this._mcPer1.stop();
+        this._mcPer1.visible = false;
+        this._mcPer2 = new egret.MovieClip(this._mfcPer.generateMovieClipData("per"));
+        this._mcPer2.addEventListener(egret.Event.COMPLETE, this.onPerMcComplete2, this);
+        this._mcPer2.x = this.stage.stageWidth * 73 / 192 - 125;
+        this._mcPer2.y = this.stage.stageHeight * 55 / 64 - 75;
+        this._LayerUI.addChild(this._mcPer2);
+        this._mcPer2.stop();
+        this._mcPer2.visible = false;
+        this._mcPer3 = new egret.MovieClip(this._mfcPer.generateMovieClipData("per"));
+        this._mcPer3.addEventListener(egret.Event.COMPLETE, this.onPerMcComplete3, this);
+        this._mcPer3.x = this.stage.stageWidth * 119 / 192 - 125;
+        this._mcPer3.y = this.stage.stageHeight * 55 / 64 - 75;
+        this._LayerUI.addChild(this._mcPer3);
+        this._mcPer3.stop();
+        this._mcPer3.visible = false;
+        this._mcPer4 = new egret.MovieClip(this._mfcPer.generateMovieClipData("per"));
+        this._mcPer4.addEventListener(egret.Event.COMPLETE, this.onPerMcComplete4, this);
+        this._mcPer4.x = this.stage.stageWidth * 163 / 192 - 125;
+        this._mcPer4.y = this.stage.stageHeight * 55 / 64 - 75;
+        this._LayerUI.addChild(this._mcPer4);
+        this._mcPer4.stop();
+        this._mcPer4.visible = false;
+        //判定显示
+        if (!this._bmpPerfect) {
+            this._bmpPerfect = new egret.Bitmap();
+        }
+        var texture4 = RES.getRes("image_perfect_png");
+        this._bmpPerfect.texture = texture4;
+        this._bmpPerfect.visible = false;
+        this._LayerUI.addChild(this._bmpPerfect);
+        if (!this._bmpGreat) {
+            this._bmpGreat = new egret.Bitmap();
+        }
+        var texture5 = RES.getRes("image_great_png");
+        this._bmpGreat.texture = texture5;
+        this._bmpGreat.visible = false;
+        this._LayerUI.addChild(this._bmpGreat);
+        if (!this._bmpMiss) {
+            this._bmpMiss = new egret.Bitmap();
+        }
+        var texture6 = RES.getRes("image_miss_png");
+        this._bmpMiss.texture = texture6;
+        this._bmpMiss.visible = false;
+        this._LayerUI.addChild(this._bmpMiss);
+        //音符统计
+        if (!this._textPerNum) {
+            this._textPerNum = new egret.TextField();
+        }
+        this._textPerNum.size = 60;
+        this._textPerNum.bold = true;
+        this._textPerNum.textColor = 0xffff00;
+        this._textPerNum.x = this.stage.stageWidth - 180;
+        this._textPerNum.y = 80;
+        this._LayerUI.addChild(this._textPerNum);
         //返回按钮
         if (!this._btnReturn) {
             this._btnReturn = new MyButton();
         }
         this._btnReturn.SetResource("image_return_png", "image_return_png", this.onReturnTouch);
         this._btnReturn.x = this.stage.stageWidth - this._btnReturn.width;
-        this.addChild(this._btnReturn);
+        this._LayerUI.addChild(this._btnReturn);
         //播放准备音效
         if (!this._soundReady) {
             this._soundReady = RES.getRes("sound_ready_wav");
@@ -149,8 +262,69 @@ var GamePanel = (function (_super) {
             else if (nNoteY >= this._rectMiss.top && nNoteY <= this._rectMiss.bottom) {
                 nCheckId = 3;
             }
+            if (nCheckId > 0) {
+                NoteManager.getInstance().HideNote(note);
+                this.PlayPerMc(note.nPathWay);
+            }
+        }
+        if (nCheckId > 0) {
+            this.ShowScoreCheck(nCheckId);
         }
         return nCheckId;
+    };
+    /**
+     * 判定显示
+     */
+    GamePanel.prototype.ShowScoreCheck = function (nCheckId) {
+        var bmp;
+        if (nCheckId == 1) {
+            bmp = this._bmpPerfect;
+        }
+        else if (nCheckId == 2) {
+            bmp = this._bmpGreat;
+        }
+        else if (nCheckId == 3) {
+            bmp = this._bmpMiss;
+        }
+        if (bmp) {
+            bmp.x = (this.stage.stageWidth - bmp.width) / 2;
+            bmp.y = this.stage.stageHeight * 23 / 128 - bmp.height / 2;
+            bmp.scaleX = bmp.scaleY = 1;
+            bmp.visible = true;
+            var nTarX = bmp.x + bmp.width * 9 / 20;
+            var nTarY = bmp.y + bmp.height * 9 / 20;
+            egret.Tween.get(bmp).to({ x: nTarX, y: nTarY, scaleX: 0.1, scaleY: 0.1 }, 200).call(this.removeScoreCheck, this, [bmp]);
+        }
+        this._nPerNum++;
+        this._textPerNum.text = "" + this._nPerNum;
+    };
+    GamePanel.prototype.removeScoreCheck = function (bmp) {
+        bmp.visible = false;
+    };
+    /**
+     * 点击特效
+     */
+    GamePanel.prototype.PlayPerMc = function (nPer) {
+        switch (Math.floor(nPer)) {
+            case 1:
+                this._mcPer1.visible = true;
+                this._mcPer1.gotoAndPlay(1, 1);
+                break;
+            case 2:
+                this._mcPer2.visible = true;
+                this._mcPer2.gotoAndPlay(1, 1);
+                break;
+            case 3:
+                this._mcPer3.visible = true;
+                this._mcPer3.gotoAndPlay(1, 1);
+                break;
+            case 4:
+                this._mcPer4.visible = true;
+                this._mcPer4.gotoAndPlay(1, 1);
+                break;
+            default:
+                break;
+        }
     };
     /**
      * 点击开始
@@ -166,32 +340,32 @@ var GamePanel = (function (_super) {
                 if (arrNote1 && arrNote1.length > 0) {
                     for (var iIndex1 = 0; iIndex1 < arrNote1.length; ++iIndex1) {
                         var curNote1 = arrNote1[iIndex1];
-                        if (this.GetScoreCheckID(curNote1) > 0) {
-                            NoteManager.getInstance().HideNote(curNote1);
-                        }
+                        this.GetScoreCheckID(curNote1);
                     }
                 }
                 if (arrNote2 && arrNote2.length > 0) {
                     for (var iIndex2 = 0; iIndex2 < arrNote2.length; ++iIndex2) {
                         var curNote2 = arrNote2[iIndex2];
-                        if (this.GetScoreCheckID(curNote2) > 0) {
-                            NoteManager.getInstance().HideNote(curNote2);
-                        }
+                        this.GetScoreCheckID(curNote2);
                     }
                 }
             }
             switch (nTouchPathWay) {
                 case 1:
                     this._bPerDown1 = true;
+                    this._bmpPerPress1.visible = true;
                     break;
                 case 2:
                     this._bPerDown2 = true;
+                    this._bmpPerPress2.visible = true;
                     break;
                 case 3:
                     this._bPerDown3 = true;
+                    this._bmpPerPress3.visible = true;
                     break;
                 case 4:
                     this._bPerDown4 = true;
+                    this._bmpPerPress4.visible = true;
                     break;
                 default:
                     break;
@@ -210,16 +384,18 @@ var GamePanel = (function (_super) {
                 if (arrNote11 && arrNote11.length > 0) {
                     for (var iIndex11 = 0; iIndex11 < arrNote11.length; ++iIndex11) {
                         var curNote11 = arrNote11[iIndex11];
-                        if (this.GetScoreCheckID(curNote11) == 1) {
-                            NoteManager.getInstance().HideNote(curNote11);
+                        var nNoteY11 = curNote11.height * curNote11.scaleY / 2 + curNote11.y;
+                        if (nNoteY11 >= this._rectPerfect.top && nNoteY11 <= this._rectPerfect.bottom) {
+                            this.GetScoreCheckID(curNote11);
                         }
                     }
                 }
                 if (arrNote12 && arrNote12.length > 0) {
                     for (var iIndex12 = 0; iIndex12 < arrNote12.length; ++iIndex12) {
                         var curNote12 = arrNote12[iIndex12];
-                        if (this.GetScoreCheckID(curNote12) == 1) {
-                            NoteManager.getInstance().HideNote(curNote12);
+                        var nNoteY12 = curNote12.height * curNote12.scaleY / 2 + curNote12.y;
+                        if (nNoteY12 >= this._rectPerfect.top && nNoteY12 <= this._rectPerfect.bottom) {
+                            this.GetScoreCheckID(curNote12);
                         }
                     }
                 }
@@ -230,16 +406,18 @@ var GamePanel = (function (_super) {
                 if (arrNote21 && arrNote21.length > 0) {
                     for (var iIndex21 = 0; iIndex21 < arrNote21.length; ++iIndex21) {
                         var curNote21 = arrNote21[iIndex21];
-                        if (this.GetScoreCheckID(curNote21) == 1) {
-                            NoteManager.getInstance().HideNote(curNote21);
+                        var nNoteY21 = curNote21.height * curNote21.scaleY / 2 + curNote21.y;
+                        if (nNoteY21 >= this._rectPerfect.top && nNoteY21 <= this._rectPerfect.bottom) {
+                            this.GetScoreCheckID(curNote21);
                         }
                     }
                 }
                 if (arrNote22 && arrNote22.length > 0) {
                     for (var iIndex22 = 0; iIndex22 < arrNote22.length; ++iIndex22) {
                         var curNote22 = arrNote22[iIndex22];
-                        if (this.GetScoreCheckID(curNote22) == 1) {
-                            NoteManager.getInstance().HideNote(curNote22);
+                        var nNoteY22 = curNote22.height * curNote22.scaleY / 2 + curNote22.y;
+                        if (nNoteY22 >= this._rectPerfect.top && nNoteY22 <= this._rectPerfect.bottom) {
+                            this.GetScoreCheckID(curNote22);
                         }
                     }
                 }
@@ -250,16 +428,18 @@ var GamePanel = (function (_super) {
                 if (arrNote31 && arrNote31.length > 0) {
                     for (var iIndex31 = 0; iIndex31 < arrNote31.length; ++iIndex31) {
                         var curNote31 = arrNote31[iIndex31];
-                        if (this.GetScoreCheckID(curNote31) == 1) {
-                            NoteManager.getInstance().HideNote(curNote31);
+                        var nNoteY31 = curNote31.height * curNote31.scaleY / 2 + curNote31.y;
+                        if (nNoteY31 >= this._rectPerfect.top && nNoteY31 <= this._rectPerfect.bottom) {
+                            this.GetScoreCheckID(curNote31);
                         }
                     }
                 }
                 if (arrNote32 && arrNote32.length > 0) {
                     for (var iIndex32 = 0; iIndex32 < arrNote32.length; ++iIndex32) {
                         var curNote32 = arrNote32[iIndex32];
-                        if (this.GetScoreCheckID(curNote32) == 1) {
-                            NoteManager.getInstance().HideNote(curNote32);
+                        var nNoteY32 = curNote32.height * curNote32.scaleY / 2 + curNote32.y;
+                        if (nNoteY32 >= this._rectPerfect.top && nNoteY32 <= this._rectPerfect.bottom) {
+                            this.GetScoreCheckID(curNote32);
                         }
                     }
                 }
@@ -270,16 +450,18 @@ var GamePanel = (function (_super) {
                 if (arrNote41 && arrNote41.length > 0) {
                     for (var iIndex41 = 0; iIndex41 < arrNote41.length; ++iIndex41) {
                         var curNote41 = arrNote41[iIndex41];
-                        if (this.GetScoreCheckID(curNote41) == 1) {
-                            NoteManager.getInstance().HideNote(curNote41);
+                        var nNoteY41 = curNote41.height * curNote41.scaleY / 2 + curNote41.y;
+                        if (nNoteY41 >= this._rectPerfect.top && nNoteY41 <= this._rectPerfect.bottom) {
+                            this.GetScoreCheckID(curNote41);
                         }
                     }
                 }
                 if (arrNote42 && arrNote42.length > 0) {
                     for (var iIndex42 = 0; iIndex42 < arrNote42.length; ++iIndex42) {
                         var curNote42 = arrNote42[iIndex42];
-                        if (this.GetScoreCheckID(curNote42) == 1) {
-                            NoteManager.getInstance().HideNote(curNote42);
+                        var nNoteY42 = curNote42.height * curNote42.scaleY / 2 + curNote42.y;
+                        if (nNoteY42 >= this._rectPerfect.top && nNoteY42 <= this._rectPerfect.bottom) {
+                            this.GetScoreCheckID(curNote42);
                         }
                     }
                 }
@@ -292,16 +474,20 @@ var GamePanel = (function (_super) {
     GamePanel.prototype.TouchEndHandler = function (nTouchPathWay) {
         switch (nTouchPathWay) {
             case 1:
-                this._bPerDown1 = true;
+                this._bPerDown1 = false;
+                this._bmpPerPress1.visible = false;
                 break;
             case 2:
-                this._bPerDown2 = true;
+                this._bPerDown2 = false;
+                this._bmpPerPress2.visible = false;
                 break;
             case 3:
-                this._bPerDown3 = true;
+                this._bPerDown3 = false;
+                this._bmpPerPress3.visible = false;
                 break;
             case 4:
-                this._bPerDown4 = true;
+                this._bPerDown4 = false;
+                this._bmpPerPress4.visible = false;
                 break;
             default:
                 break;
@@ -328,27 +514,101 @@ var GamePanel = (function (_super) {
      * 游戏滑动事件
      */
     GamePanel.prototype.onGameTouchMove = function (event) {
-        this._bPerDown1 = false;
-        this._bPerDown2 = false;
-        this._bPerDown3 = false;
-        this._bPerDown4 = false;
         if (event.localX > 20 && event.localX < this.stage.stageWidth - 20 && event.localY > this.stage.stageHeight * 3 / 4 && event.localY < this.stage.stageHeight - 20) {
             var nPerDownType = this.GetTouchPathWay(event.localX, event.localY);
             switch (nPerDownType) {
                 case 1:
                     this._bPerDown1 = true;
+                    if (!this._bPerDown1) {
+                        this._bmpPerPress1.visible = true;
+                    }
+                    if (this._bPerDown2) {
+                        this._bPerDown2 = false;
+                        this._bmpPerPress2.visible = false;
+                    }
+                    if (this._bPerDown3) {
+                        this._bPerDown3 = false;
+                        this._bmpPerPress3.visible = false;
+                    }
+                    if (this._bPerDown4) {
+                        this._bPerDown4 = false;
+                        this._bmpPerPress4.visible = false;
+                    }
                     break;
                 case 2:
                     this._bPerDown2 = true;
+                    if (!this._bPerDown2) {
+                        this._bmpPerPress2.visible = true;
+                    }
+                    if (this._bPerDown1) {
+                        this._bPerDown1 = false;
+                        this._bmpPerPress1.visible = false;
+                    }
+                    if (this._bPerDown3) {
+                        this._bPerDown3 = false;
+                        this._bmpPerPress3.visible = false;
+                    }
+                    if (this._bPerDown4) {
+                        this._bPerDown4 = false;
+                        this._bmpPerPress4.visible = false;
+                    }
                     break;
                 case 3:
                     this._bPerDown3 = true;
+                    if (!this._bPerDown3) {
+                        this._bmpPerPress3.visible = true;
+                    }
+                    if (this._bPerDown1) {
+                        this._bPerDown1 = false;
+                        this._bmpPerPress1.visible = false;
+                    }
+                    if (this._bPerDown2) {
+                        this._bPerDown2 = false;
+                        this._bmpPerPress2.visible = false;
+                    }
+                    if (this._bPerDown4) {
+                        this._bPerDown4 = false;
+                        this._bmpPerPress4.visible = false;
+                    }
                     break;
                 case 4:
                     this._bPerDown4 = true;
+                    if (!this._bPerDown4) {
+                        this._bmpPerPress4.visible = true;
+                    }
+                    if (this._bPerDown1) {
+                        this._bPerDown1 = false;
+                        this._bmpPerPress1.visible = false;
+                    }
+                    if (this._bPerDown2) {
+                        this._bPerDown2 = false;
+                        this._bmpPerPress2.visible = false;
+                    }
+                    if (this._bPerDown3) {
+                        this._bPerDown3 = false;
+                        this._bmpPerPress3.visible = false;
+                    }
                     break;
                 default:
                     break;
+            }
+        }
+        else {
+            if (this._bPerDown1) {
+                this._bPerDown1 = false;
+                this._bmpPerPress1.visible = false;
+            }
+            if (this._bPerDown2) {
+                this._bPerDown2 = false;
+                this._bmpPerPress2.visible = false;
+            }
+            if (this._bPerDown3) {
+                this._bPerDown3 = false;
+                this._bmpPerPress3.visible = false;
+            }
+            if (this._bPerDown4) {
+                this._bPerDown4 = false;
+                this._bmpPerPress4.visible = false;
             }
         }
     };
@@ -383,14 +643,17 @@ var GamePanel = (function (_super) {
             else if (nPathWay == 4) {
                 nTargetX = this.stage.stageWidth * 175 / 192 - 114;
             }
-            this.addChild(note);
+            this._LayerNote.addChild(note);
             egret.Tween.get(note).to({ x: nTargetX, y: this.stage.stageHeight - 42, scaleX: 1, scaleY: 1 }, GameConst.NOTE_FLY_TIME, egret.Ease.sineIn).call(this.removeNote, this, [note]);
         }
         this.TouchPressHandler();
         return false;
     };
     GamePanel.prototype.removeNote = function (note) {
-        NoteManager.getInstance().HideNote(note);
+        if (note && note.parent) {
+            NoteManager.getInstance().HideNote(note);
+            this.ShowScoreCheck(3);
+        }
     };
     /**
      * 边线闪烁
@@ -422,6 +685,25 @@ var GamePanel = (function (_super) {
             default:
                 break;
         }
+    };
+    /**
+     * 点击特效播放完毕
+     */
+    GamePanel.prototype.onPerMcComplete1 = function (event) {
+        this._mcPer1.stop();
+        this._mcPer1.visible = false;
+    };
+    GamePanel.prototype.onPerMcComplete2 = function (event) {
+        this._mcPer2.stop();
+        this._mcPer2.visible = false;
+    };
+    GamePanel.prototype.onPerMcComplete3 = function (event) {
+        this._mcPer3.stop();
+        this._mcPer3.visible = false;
+    };
+    GamePanel.prototype.onPerMcComplete4 = function (event) {
+        this._mcPer4.stop();
+        this._mcPer4.visible = false;
     };
     /**
      * 音乐播放完毕
@@ -458,16 +740,52 @@ var GamePanel = (function (_super) {
             this._channelGame.stop();
             this._channelGame = null;
         }
+        this._mcPer1.stop();
+        this._mcPer1.removeEventListener(egret.Event.COMPLETE, this.onPerMcComplete1, this);
+        if (this._mcPer1 && this._mcPer1.parent) {
+            this._mcPer1.parent.removeChild(this._mcPer1);
+        }
+        this._mcPer2.stop();
+        this._mcPer2.removeEventListener(egret.Event.COMPLETE, this.onPerMcComplete2, this);
+        if (this._mcPer2 && this._mcPer2.parent) {
+            this._mcPer2.parent.removeChild(this._mcPer2);
+        }
+        this._mcPer3.stop();
+        this._mcPer3.removeEventListener(egret.Event.COMPLETE, this.onPerMcComplete3, this);
+        if (this._mcPer3 && this._mcPer3.parent) {
+            this._mcPer3.parent.removeChild(this._mcPer3);
+        }
+        this._mcPer4.stop();
+        this._mcPer4.removeEventListener(egret.Event.COMPLETE, this.onPerMcComplete4, this);
+        if (this._mcPer4 && this._mcPer4.parent) {
+            this._mcPer4.parent.removeChild(this._mcPer4);
+        }
         egret.stopTick(this.timerFunc, this);
         NoteManager.getInstance().HideAllNote();
+        this._LayerScene = null;
+        this._LayerNote = null;
+        this._LayerUI = null;
         this._bmpBg = null;
         this._bmpPerBg = null;
+        this._bmpPerPress1 = null;
+        this._bmpPerPress2 = null;
+        this._bmpPerPress3 = null;
+        this._bmpPerPress4 = null;
         this._bmpSideLine = null;
         egret.clearTimeout(this._nTimeOutId1);
         this._mfcScene1 = null;
         this._mfcScene2 = null;
         this._mcScene = null;
+        this._mfcPer = null;
+        this._mcPer1 = null;
+        this._mcPer2 = null;
+        this._mcPer3 = null;
+        this._mcPer4 = null;
         egret.clearTimeout(this._nTimeOutId2);
+        this._bmpPerfect = null;
+        this._bmpGreat = null;
+        this._bmpMiss = null;
+        this._textPerNum = null;
         this._btnReturn = null;
         this._soundReady = null;
         this._soundGame = null;
