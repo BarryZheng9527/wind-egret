@@ -892,23 +892,8 @@ class GamePanel extends egret.DisplayObjectContainer
 
     private removeNote(note:NoteItem):void
     {
-        if (note && note.nNoteType == 42)
-        {
-            console.log("key"+note.nKey);
-            if (note.parent)
-            {
-                console.log("parent");
-            }
-            else
-            {
-                console.log("no parent");
-            }
-        }
-        if (note && note.parent)
-        {
-            NoteManager.getInstance().HideNote(note);
-            this.ShowScoreCheck(3);
-        }
+        NoteManager.getInstance().HideNote(note);
+        this.ShowScoreCheck(3);
     }
 
     /**

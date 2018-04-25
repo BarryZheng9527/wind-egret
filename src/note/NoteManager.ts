@@ -64,6 +64,7 @@ class NoteManager extends egret.DisplayObject
         var arrNote:any[] = this._objCache[note.nNoteType];
         if (arrNote)
         {
+            egret.Tween.removeTweens(note);
             arrNote.push(note);
         }
     }
@@ -125,6 +126,7 @@ class NoteManager extends egret.DisplayObject
                 var curNote:NoteItem = arrNote[iIndex];
                 if (curNote && curNote.parent)
                 {
+                    egret.Tween.removeTweens(curNote);
                     curNote.parent.removeChild(curNote);
                 }
             }

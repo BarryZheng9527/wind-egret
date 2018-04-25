@@ -62,6 +62,7 @@ var NoteManager = (function (_super) {
     NoteManager.prototype.ReturnNote = function (note) {
         var arrNote = this._objCache[note.nNoteType];
         if (arrNote) {
+            egret.Tween.removeTweens(note);
             arrNote.push(note);
         }
     };
@@ -108,6 +109,7 @@ var NoteManager = (function (_super) {
             for (var iIndex = 0; iIndex < arrNote.length; ++iIndex) {
                 var curNote = arrNote[iIndex];
                 if (curNote && curNote.parent) {
+                    egret.Tween.removeTweens(curNote);
                     curNote.parent.removeChild(curNote);
                 }
             }
