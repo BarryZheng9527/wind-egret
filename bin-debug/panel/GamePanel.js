@@ -42,6 +42,7 @@ var GamePanel = (function (_super) {
     GamePanel.prototype.InitData = function () {
         this._nCurCombo = 0;
         this._nScore = 0;
+        this._nScoreRate = 1;
         this._nPerNum = 0;
         this._nGameTime = 0;
         this._nTimeFlag = 0;
@@ -227,7 +228,36 @@ var GamePanel = (function (_super) {
         this._textPerNum.textColor = 0xffff00;
         this._textPerNum.x = this.stage.stageWidth - 180;
         this._textPerNum.y = 80;
+        this._textPerNum.visible = false;
         this._LayerUI.addChild(this._textPerNum);
+        //积分倍数
+        if (!this._bmpScoreRate1) {
+            this._bmpScoreRate1 = new egret.Bitmap();
+        }
+        var texture11 = RES.getRes("image_double_png");
+        this._bmpScoreRate1.texture = texture11;
+        this._bmpScoreRate1.x = this.stage.stageWidth * 43 / 48 - this._bmpScoreRate1.width / 2;
+        this._bmpScoreRate1.y = this.stage.stageHeight / 8 - this._bmpScoreRate1.height / 2;
+        this._bmpScoreRate1.visible = false;
+        this._LayerUI.addChild(this._bmpScoreRate1);
+        if (!this._bmpScoreRate2) {
+            this._bmpScoreRate2 = new egret.Bitmap();
+        }
+        var texture12 = RES.getRes("image_triple_png");
+        this._bmpScoreRate2.texture = texture12;
+        this._bmpScoreRate2.x = this.stage.stageWidth * 43 / 48 - this._bmpScoreRate2.width / 2;
+        this._bmpScoreRate2.y = this.stage.stageHeight / 8 - this._bmpScoreRate2.height / 2;
+        this._bmpScoreRate2.visible = false;
+        this._LayerUI.addChild(this._bmpScoreRate2);
+        if (!this._bmpScoreRate3) {
+            this._bmpScoreRate3 = new egret.Bitmap();
+        }
+        var texture13 = RES.getRes("image_quadruple_png");
+        this._bmpScoreRate3.texture = texture13;
+        this._bmpScoreRate3.x = this.stage.stageWidth * 43 / 48 - this._bmpScoreRate3.width / 2;
+        this._bmpScoreRate3.y = this.stage.stageHeight / 8 - this._bmpScoreRate3.height / 2;
+        this._bmpScoreRate3.visible = false;
+        this._LayerUI.addChild(this._bmpScoreRate3);
         //返回按钮
         if (!this._btnReturn) {
             this._btnReturn = new MyButton();
@@ -298,28 +328,7 @@ var GamePanel = (function (_super) {
      * 判定显示
      */
     GamePanel.prototype.ShowScoreCheck = function (nCheckId) {
-        var bmp;
-        if (nCheckId == 1) {
-            bmp = this._bmpPerfect;
-            this._nScore += GameConst.PERFECT_SCORE;
-        }
-        else if (nCheckId == 2) {
-            bmp = this._bmpGreat;
-            this._nScore += GameConst.GREAT_SCORE;
-        }
-        else if (nCheckId == 3) {
-            bmp = this._bmpMiss;
-        }
-        if (bmp) {
-            egret.Tween.removeTweens(bmp);
-            bmp.scaleX = bmp.scaleY = 1;
-            bmp.x = (this.stage.stageWidth - bmp.width) / 2;
-            bmp.y = this.stage.stageHeight * 23 / 128 - bmp.height / 2;
-            bmp.visible = true;
-            var nTarX = bmp.x + bmp.width * 9 / 20;
-            var nTarY = bmp.y + bmp.height * 9 / 20;
-            egret.Tween.get(bmp).to({ x: nTarX, y: nTarY, scaleX: 0.1, scaleY: 0.1 }, 200).call(this.removeScoreCheck, this, [bmp]);
-        }
+        //连击
         if (nCheckId < 3) {
             this._nCurCombo++;
         }
@@ -334,9 +343,63 @@ var GamePanel = (function (_super) {
                 this._bmtextCombo.text = "";
             }
         }
+        //分数倍率
+        if (this._nCurCombo >= GameConst.DOUBLE_SCORE_NUM) {
+            if (this._nCurCombo == GameConst.DOUBLE_SCORE_NUM) {
+                this._nScoreRate = 2;
+                this._bmpScoreRate1.visible = true;
+                this._bmpScoreRate2.visible = false;
+                this._bmpScoreRate3.visible = false;
+            }
+            else if (this._nCurCombo == GameConst.TRIPLE_SCORE_NUM) {
+                this._nScoreRate = 3;
+                this._bmpScoreRate1.visible = false;
+                this._bmpScoreRate2.visible = true;
+                this._bmpScoreRate3.visible = false;
+            }
+            else if (this._nCurCombo == GameConst.QUADRUPLE_SCORE_NUM) {
+                this._nScoreRate = 4;
+                this._bmpScoreRate1.visible = false;
+                this._bmpScoreRate2.visible = false;
+                this._bmpScoreRate3.visible = true;
+            }
+        }
+        else {
+            this._nScoreRate = 1;
+            this._bmpScoreRate1.visible = false;
+            this._bmpScoreRate2.visible = false;
+            this._bmpScoreRate3.visible = false;
+        }
+        //判定结果
+        var bmp;
+        var nScoreAdd = 0;
+        if (nCheckId == 1) {
+            bmp = this._bmpPerfect;
+            nScoreAdd = GameConst.PERFECT_SCORE;
+        }
+        else if (nCheckId == 2) {
+            bmp = this._bmpGreat;
+            nScoreAdd = GameConst.GREAT_SCORE;
+        }
+        else if (nCheckId == 3) {
+            bmp = this._bmpMiss;
+        }
+        if (bmp) {
+            egret.Tween.removeTweens(bmp);
+            bmp.scaleX = bmp.scaleY = 1;
+            bmp.x = (this.stage.stageWidth - bmp.width) / 2;
+            bmp.y = this.stage.stageHeight * 23 / 128 - bmp.height / 2;
+            bmp.visible = true;
+            var nTarX = bmp.x + bmp.width * 9 / 20;
+            var nTarY = bmp.y + bmp.height * 9 / 20;
+            egret.Tween.get(bmp).to({ x: nTarX, y: nTarY, scaleX: 0.1, scaleY: 0.1 }, 200).call(this.removeScoreCheck, this, [bmp]);
+        }
+        //分数
+        this._nScore += this._nScoreRate * nScoreAdd;
         if (this._bmtextScore) {
             this._bmtextScore.text = "" + this._nScore;
         }
+        //计数
         this._nPerNum++;
         if (this._textPerNum) {
             this._textPerNum.text = "" + this._nPerNum;
@@ -832,6 +895,9 @@ var GamePanel = (function (_super) {
         this._bmtextCombo = null;
         this._bmtextScore = null;
         this._textPerNum = null;
+        this._bmpScoreRate1 = null;
+        this._bmpScoreRate2 = null;
+        this._bmpScoreRate3 = null;
         this._btnReturn = null;
         this._soundReady = null;
         this._soundGame = null;
