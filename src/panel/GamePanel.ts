@@ -86,6 +86,9 @@ class GamePanel extends egret.DisplayObjectContainer
         this.addEventListener(egret.TouchEvent.TOUCH_END, this.onGameTouch, this);
         this.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.onGameTouchMove, this);
 
+        document.addEventListener("keydown", (event) => {this.OnKeyDown(event);});
+        document.addEventListener("keyup", (event) => {this.OnKeyUp(event);});
+
         this.InitData();
         this.UpdateShow();
     }
@@ -98,6 +101,9 @@ class GamePanel extends egret.DisplayObjectContainer
         this.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onGameTouch, this);
         this.removeEventListener(egret.TouchEvent.TOUCH_END, this.onGameTouch, this);
         this.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.onGameTouchMove, this);
+
+        document.removeEventListener("keydown", (event) => {this.OnKeyDown(event);});
+        document.removeEventListener("keyup", (event) => {this.OnKeyUp(event);});
 
         this.Clear();
     }
@@ -394,6 +400,32 @@ class GamePanel extends egret.DisplayObjectContainer
             return 4;
         }
         return 0;
+    }
+
+    /**
+     * 获取是否有效按键
+     */
+    private GetKeyPathWay(szKeyCode:string):number
+    {
+        var nPathWay:number = 0;
+        switch (szKeyCode)
+        {
+            case "KeyD":
+                nPathWay = 1;
+                break;
+            case "KeyF":
+                nPathWay = 2;
+                break;
+            case "KeyJ":
+                nPathWay = 3;
+                break;
+            case "KeyK":
+                nPathWay = 4;
+                break;
+            default:
+                break;
+        }
+        return nPathWay;
     }
 
     /**
@@ -917,6 +949,26 @@ class GamePanel extends egret.DisplayObjectContainer
                 this._bmpPerPress4.visible = false;
             }
         }
+    }
+
+    /**
+     * 键盘按下事件
+     */
+    private OnKeyDown(event:Event)
+    {
+        var szKeyCode:string = (event as KeyboardEvent).code;
+        var nTouchPathWayStart:number = this.GetKeyPathWay(szKeyCode);
+        this.TouchBeginHandler(nTouchPathWayStart);
+    }
+
+    /**
+     * 键盘抬起事件
+     */
+    private OnKeyUp(event:Event)
+    {
+        var szKeyCode:string = (event as KeyboardEvent).code;
+        var nTouchPathWayEnd:number = this.GetKeyPathWay(szKeyCode);
+        this.TouchEndHandler(nTouchPathWayEnd);
     }
 
     /**

@@ -20,20 +20,26 @@ var GamePanel = (function (_super) {
         return _this;
     }
     GamePanel.prototype.onAddToStage = function (event) {
+        var _this = this;
         this.removeEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
         this.addEventListener(egret.Event.REMOVED_FROM_STAGE, this.onRemoveFromStage, this);
         this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onGameTouch, this);
         this.addEventListener(egret.TouchEvent.TOUCH_END, this.onGameTouch, this);
         this.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.onGameTouchMove, this);
+        document.addEventListener("keydown", function (event) { _this.OnKeyDown(event); });
+        document.addEventListener("keyup", function (event) { _this.OnKeyUp(event); });
         this.InitData();
         this.UpdateShow();
     };
     GamePanel.prototype.onRemoveFromStage = function (event) {
+        var _this = this;
         this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
         this.removeEventListener(egret.Event.REMOVED_FROM_STAGE, this.onRemoveFromStage, this);
         this.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onGameTouch, this);
         this.removeEventListener(egret.TouchEvent.TOUCH_END, this.onGameTouch, this);
         this.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.onGameTouchMove, this);
+        document.removeEventListener("keydown", function (event) { _this.OnKeyDown(event); });
+        document.removeEventListener("keyup", function (event) { _this.OnKeyUp(event); });
         this.Clear();
     };
     /**
@@ -297,6 +303,29 @@ var GamePanel = (function (_super) {
             return 4;
         }
         return 0;
+    };
+    /**
+     * 获取是否有效按键
+     */
+    GamePanel.prototype.GetKeyPathWay = function (szKeyCode) {
+        var nPathWay = 0;
+        switch (szKeyCode) {
+            case "KeyD":
+                nPathWay = 1;
+                break;
+            case "KeyF":
+                nPathWay = 2;
+                break;
+            case "KeyJ":
+                nPathWay = 3;
+                break;
+            case "KeyK":
+                nPathWay = 4;
+                break;
+            default:
+                break;
+        }
+        return nPathWay;
     };
     /**
      * 音符判定
@@ -718,6 +747,22 @@ var GamePanel = (function (_super) {
                 this._bmpPerPress4.visible = false;
             }
         }
+    };
+    /**
+     * 键盘按下事件
+     */
+    GamePanel.prototype.OnKeyDown = function (event) {
+        var szKeyCode = event.code;
+        var nTouchPathWayStart = this.GetKeyPathWay(szKeyCode);
+        this.TouchBeginHandler(nTouchPathWayStart);
+    };
+    /**
+     * 键盘抬起事件
+     */
+    GamePanel.prototype.OnKeyUp = function (event) {
+        var szKeyCode = event.code;
+        var nTouchPathWayEnd = this.GetKeyPathWay(szKeyCode);
+        this.TouchEndHandler(nTouchPathWayEnd);
     };
     /**
      * 计时器回调
