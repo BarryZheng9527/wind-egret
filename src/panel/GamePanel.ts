@@ -60,6 +60,11 @@ class GamePanel extends egret.DisplayObjectContainer
     private _bPerDown2:boolean;
     private _bPerDown3:boolean;
     private _bPerDown4:boolean;
+    //区域点击高亮绘制
+    private _shapePerDown1:egret.Shape;
+    private _shapePerDown2:egret.Shape;
+    private _shapePerDown3:egret.Shape;
+    private _shapePerDown4:egret.Shape;
     //有效点击区域
     private _rectClick1:egret.Rectangle;
     private _rectClick2:egret.Rectangle;
@@ -163,6 +168,63 @@ class GamePanel extends egret.DisplayObjectContainer
         this._bmpPerBg.texture = texture2;
         this._bmpPerBg.y = this.stage.stageHeight - 543;
         this._LayerScene.addChild(this._bmpPerBg);
+        //区域点击高亮
+        if (!this._shapePerDown1)
+        {
+            this._shapePerDown1 = new egret.Shape();
+        }
+        this._shapePerDown1.graphics.lineStyle(1, 0x000001, 1);
+        this._shapePerDown1.graphics.beginFill(0x33ccff, 0.5);
+        this._shapePerDown1.graphics.moveTo(this.stage.stageWidth * 5 / 12, this.stage.stageHeight * 27 / 128);
+        this._shapePerDown1.graphics.lineTo(this.stage.stageWidth * 17 / 192, this.stage.stageHeight * 103 / 128);
+        this._shapePerDown1.graphics.lineTo(this.stage.stageWidth * 55 / 192, this.stage.stageHeight * 103 / 128);
+        this._shapePerDown1.graphics.lineTo(this.stage.stageWidth * 11 / 24, this.stage.stageHeight * 27 / 128);
+        this._shapePerDown1.graphics.lineTo(this.stage.stageWidth * 5 / 12, this.stage.stageHeight * 27 / 128);
+        this._shapePerDown1.graphics.endFill();
+        this._LayerScene.addChild(this._shapePerDown1);
+        this._shapePerDown1.visible = false;
+        if (!this._shapePerDown2)
+        {
+            this._shapePerDown2 = new egret.Shape();
+        }
+        this._shapePerDown2.graphics.lineStyle(1, 0x000001, 1);
+        this._shapePerDown2.graphics.beginFill(0x33ccff, 0.5);
+        this._shapePerDown2.graphics.moveTo(this.stage.stageWidth * 11 / 24, this.stage.stageHeight * 27 / 128);
+        this._shapePerDown2.graphics.lineTo(this.stage.stageWidth * 55 / 192, this.stage.stageHeight * 103 / 128);
+        this._shapePerDown2.graphics.lineTo(this.stage.stageWidth / 2, this.stage.stageHeight * 103 / 128);
+        this._shapePerDown2.graphics.lineTo(this.stage.stageWidth / 2, this.stage.stageHeight * 27 / 128);
+        this._shapePerDown2.graphics.lineTo(this.stage.stageWidth * 11 / 24, this.stage.stageHeight * 27 / 128);
+        this._shapePerDown2.graphics.endFill();
+        this._LayerScene.addChild(this._shapePerDown2);
+        this._shapePerDown2.visible = false;
+        if (!this._shapePerDown3)
+        {
+            this._shapePerDown3 = new egret.Shape();
+        }
+        this._shapePerDown3.graphics.lineStyle(1, 0x000001, 1);
+        this._shapePerDown3.graphics.beginFill(0x33ccff, 0.5);
+        this._shapePerDown3.graphics.moveTo(this.stage.stageWidth / 2, this.stage.stageHeight * 27 / 128);
+        this._shapePerDown3.graphics.lineTo(this.stage.stageWidth / 2, this.stage.stageHeight * 103 / 128);
+        this._shapePerDown3.graphics.lineTo(this.stage.stageWidth * 137 / 192, this.stage.stageHeight * 103 / 128);
+        this._shapePerDown3.graphics.lineTo(this.stage.stageWidth * 13 / 24, this.stage.stageHeight * 27 / 128);
+        this._shapePerDown3.graphics.lineTo(this.stage.stageWidth / 2, this.stage.stageHeight * 27 / 128);
+        this._shapePerDown3.graphics.endFill();
+        this._LayerScene.addChild(this._shapePerDown3);
+        this._shapePerDown3.visible = false;
+        if (!this._shapePerDown4)
+        {
+            this._shapePerDown4 = new egret.Shape();
+        }
+        this._shapePerDown4.graphics.lineStyle(1, 0x000001, 1);
+        this._shapePerDown4.graphics.beginFill(0x33ccff, 0.5);
+        this._shapePerDown4.graphics.moveTo(this.stage.stageWidth * 13 / 24, this.stage.stageHeight * 27 / 128);
+        this._shapePerDown4.graphics.lineTo(this.stage.stageWidth * 137 / 192, this.stage.stageHeight * 103 / 128);
+        this._shapePerDown4.graphics.lineTo(this.stage.stageWidth * 176 / 192, this.stage.stageHeight * 103 / 128);
+        this._shapePerDown4.graphics.lineTo(this.stage.stageWidth * 113 / 192, this.stage.stageHeight * 27 / 128);
+        this._shapePerDown4.graphics.lineTo(this.stage.stageWidth * 13 / 24, this.stage.stageHeight * 27 / 128);
+        this._shapePerDown4.graphics.endFill();
+        this._LayerScene.addChild(this._shapePerDown4);
+        this._shapePerDown4.visible = false;
         //按键选中
         if (!this._bmpPerPress1)
         {
@@ -630,18 +692,22 @@ class GamePanel extends egret.DisplayObjectContainer
                 case 1:
                     this._bPerDown1 = true;
                     this._bmpPerPress1.visible = true;
+                    this._shapePerDown1.visible = true;
                     break;
                 case 2:
                     this._bPerDown2 = true;
                     this._bmpPerPress2.visible = true;
+                    this._shapePerDown2.visible = true;
                     break;
                 case 3:
                     this._bPerDown3 = true;
                     this._bmpPerPress3.visible = true;
+                    this._shapePerDown3.visible = true;
                     break;
                 case 4:
                     this._bPerDown4 = true;
                     this._bmpPerPress4.visible = true;
+                    this._shapePerDown4.visible = true;
                     break;
                 default:
                     break;
@@ -786,18 +852,22 @@ class GamePanel extends egret.DisplayObjectContainer
             case 1:
                 this._bPerDown1 = false;
                 this._bmpPerPress1.visible = false;
+                this._shapePerDown1.visible = false;
                 break;
             case 2:
                 this._bPerDown2 = false;
                 this._bmpPerPress2.visible = false;
+                this._shapePerDown2.visible = false;
                 break;
             case 3:
                 this._bPerDown3 = false;
                 this._bmpPerPress3.visible = false;
+                this._shapePerDown3.visible = false;
                 break;
             case 4:
                 this._bPerDown4 = false;
                 this._bmpPerPress4.visible = false;
+                this._shapePerDown4.visible = false;
                 break;
             default:
                 break;
@@ -838,88 +908,104 @@ class GamePanel extends egret.DisplayObjectContainer
                     if (!this._bPerDown1)
                     {
                         this._bmpPerPress1.visible = true;
+                        this._shapePerDown1.visible = true;
                     }
                     this._bPerDown1 = true;
                     if (this._bPerDown2)
                     {
                         this._bPerDown2 = false;
                         this._bmpPerPress2.visible = false;
+                        this._shapePerDown2.visible = false;
                     }
                     if (this._bPerDown3)
                     {
                         this._bPerDown3 = false;
                         this._bmpPerPress3.visible = false;
+                        this._shapePerDown3.visible = false;
                     }
                     if (this._bPerDown4)
                     {
                         this._bPerDown4 = false;
                         this._bmpPerPress4.visible = false;
+                        this._shapePerDown4.visible = false;
                     }
                     break;
                 case 2:
                     if (!this._bPerDown2)
                     {
                         this._bmpPerPress2.visible = true;
+                        this._shapePerDown2.visible = true;
                     }
                     this._bPerDown2 = true;
                     if (this._bPerDown1)
                     {
                         this._bPerDown1 = false;
                         this._bmpPerPress1.visible = false;
+                        this._shapePerDown1.visible = false;
                     }
                     if (this._bPerDown3)
                     {
                         this._bPerDown3 = false;
                         this._bmpPerPress3.visible = false;
+                        this._shapePerDown3.visible = false;
                     }
                     if (this._bPerDown4)
                     {
                         this._bPerDown4 = false;
                         this._bmpPerPress4.visible = false;
+                        this._shapePerDown4.visible = false;
                     }
                     break;
                 case 3:
                     if (!this._bPerDown3)
                     {
                         this._bmpPerPress3.visible = true;
+                        this._shapePerDown3.visible = true;
                     }
                     this._bPerDown3 = true;
                     if (this._bPerDown1)
                     {
                         this._bPerDown1 = false;
                         this._bmpPerPress1.visible = false;
+                        this._shapePerDown1.visible = false;
                     }
                     if (this._bPerDown2)
                     {
                         this._bPerDown2 = false;
                         this._bmpPerPress2.visible = false;
+                        this._shapePerDown2.visible = false;
                     }
                     if (this._bPerDown4)
                     {
                         this._bPerDown4 = false;
                         this._bmpPerPress4.visible = false;
+                        this._shapePerDown4.visible = false;
                     }
                     break;
                 case 4:
                     if (!this._bPerDown4)
                     {
                         this._bmpPerPress4.visible = true;
+                        this._shapePerDown4.visible = true;
                     }
                     this._bPerDown4 = true;
                     if (this._bPerDown1)
                     {
                         this._bPerDown1 = false;
                         this._bmpPerPress1.visible = false;
+                        this._shapePerDown1.visible = false;
                     }
                     if (this._bPerDown2)
                     {
                         this._bPerDown2 = false;
                         this._bmpPerPress2.visible = false;
+                        this._shapePerDown2.visible = false;
                     }
                     if (this._bPerDown3)
                     {
                         this._bPerDown3 = false;
                         this._bmpPerPress3.visible = false;
+                        this._shapePerDown3.visible = false;
                     }
                     break;
                 default:
@@ -932,21 +1018,25 @@ class GamePanel extends egret.DisplayObjectContainer
             {
                 this._bPerDown1 = false;
                 this._bmpPerPress1.visible = false;
+                this._shapePerDown1.visible = false;
             }
             if (this._bPerDown2)
             {
                 this._bPerDown2 = false;
                 this._bmpPerPress2.visible = false;
+                this._shapePerDown2.visible = false;
             }
             if (this._bPerDown3)
             {
                 this._bPerDown3 = false;
                 this._bmpPerPress3.visible = false;
+                this._shapePerDown3.visible = false;
             }
             if (this._bPerDown4)
             {
                 this._bPerDown4 = false;
                 this._bmpPerPress4.visible = false;
+                this._shapePerDown4.visible = false;
             }
         }
     }
@@ -1194,6 +1284,14 @@ class GamePanel extends egret.DisplayObjectContainer
         this._btnReturn = null;
         this._soundReady = null;
         this._soundGame = null;
+        this._shapePerDown1.graphics.clear();
+        this._shapePerDown1 = null;
+        this._shapePerDown2.graphics.clear();
+        this._shapePerDown2 = null;
+        this._shapePerDown3.graphics.clear();
+        this._shapePerDown3 = null;
+        this._shapePerDown4.graphics.clear();
+        this._shapePerDown4 = null;
         this._rectClick1 = null;
         this._rectClick2 = null;
         this._rectClick3 = null;
