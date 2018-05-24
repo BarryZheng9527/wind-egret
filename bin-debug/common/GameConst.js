@@ -5,6 +5,8 @@ var GameConst = (function () {
     function GameConst() {
     }
     GameConst.NOTE_FLY_TIME = 1000; //音符飞行时间（毫秒），与配置表结合使用
+    GameConst.PERFECT_SCORE = 200; //PERFECT判定分数
+    GameConst.GREAT_SCORE = 80; //GREAT判定分数
     return GameConst;
 }());
 __reflect(GameConst.prototype, "GameConst");

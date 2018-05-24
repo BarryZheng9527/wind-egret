@@ -1,7 +1,7 @@
 {
 	"groups": [
 		{
-			"keys": "config_born_json,sound_game_mp3,image_startBg_jpg,image_start1_png,image_start2_png,image_keyend1_png,image_keyend2_png,image_keyend3_png,image_keyend4_png,image_keyMiddle1_png,image_keyMiddle3_png,image_keyMiddle4_png,image_keyStart12_png,image_keyStart22_png,image_keyStart11_png,image_keyMiddle2_png,image_keyStart31_png,image_keyStart41_png,image_keyStart32_png,image_keyStart42_png,image_keyStart21_png,sound_start_mp3,image_gameBg_jpg,image_return_png,image_perBg_png,movie_start1_json,movie_start9_png,movie_start8_png,movie_start7_png,movie_start8_json,movie_start9_json,movie_start6_png,movie_start5_png,movie_start4_png,movie_start3_png,movie_start4_json,movie_start5_json,movie_start7_json,movie_start3_json,movie_start6_json,movie_start2_json,movie_start10_json,movie_start10_png,movie_start2_png,movie_start1_png,sound_light_mp3,sound_cheer_mp3,sound_ready_wav,movie_scene1_json,movie_scene1_png,movie_scene2_json,movie_scene2_png,movie_per_json,movie_per_png,image_sideline_png,image_great_png,image_miss_png,image_perfect_png,image_keyPress1_png,image_keyPress2_png,image_keyPress3_png,image_keyPress4_png",
+			"keys": "config_born_json,sound_game_mp3,image_startBg_jpg,image_start1_png,image_start2_png,image_keyend1_png,image_keyend2_png,image_keyend3_png,image_keyend4_png,image_keyMiddle1_png,image_keyMiddle3_png,image_keyMiddle4_png,image_keyStart12_png,image_keyStart22_png,image_keyStart11_png,image_keyMiddle2_png,image_keyStart31_png,image_keyStart41_png,image_keyStart32_png,image_keyStart42_png,image_keyStart21_png,sound_start_mp3,image_gameBg_jpg,image_return_png,image_perBg_png,movie_start1_json,movie_start9_png,movie_start8_png,movie_start7_png,movie_start8_json,movie_start9_json,movie_start6_png,movie_start5_png,movie_start4_png,movie_start3_png,movie_start4_json,movie_start5_json,movie_start7_json,movie_start3_json,movie_start6_json,movie_start2_json,movie_start10_json,movie_start10_png,movie_start2_png,movie_start1_png,sound_light_mp3,sound_cheer_mp3,sound_ready_wav,movie_scene1_json,movie_scene1_png,movie_scene2_json,movie_scene2_png,movie_per_json,movie_per_png,image_sideline_png,image_great_png,image_miss_png,image_perfect_png,image_keyPress1_png,image_keyPress2_png,image_keyPress3_png,image_keyPress4_png,font_combo_fnt,font_score_fnt,font_score_png,font_combo_png",
 			"name": "preload"
 		}
 	],
@@ -22,304 +22,319 @@
 			"name": "image_startBg_jpg"
 		},
 		{
-			"name": "image_start1_png",
+			"url": "image/image_start1.png",
 			"type": "image",
-			"url": "image/image_start1.png"
+			"name": "image_start1_png"
 		},
 		{
-			"name": "image_start2_png",
+			"url": "image/image_start2.png",
 			"type": "image",
-			"url": "image/image_start2.png"
+			"name": "image_start2_png"
 		},
 		{
-			"name": "image_keyend1_png",
+			"url": "image/image_keyend1.png",
 			"type": "image",
-			"url": "image/image_keyend1.png"
+			"name": "image_keyend1_png"
 		},
 		{
-			"name": "image_keyend2_png",
+			"url": "image/image_keyend2.png",
 			"type": "image",
-			"url": "image/image_keyend2.png"
+			"name": "image_keyend2_png"
 		},
 		{
-			"name": "image_keyend3_png",
+			"url": "image/image_keyend3.png",
 			"type": "image",
-			"url": "image/image_keyend3.png"
+			"name": "image_keyend3_png"
 		},
 		{
-			"name": "image_keyend4_png",
+			"url": "image/image_keyend4.png",
 			"type": "image",
-			"url": "image/image_keyend4.png"
+			"name": "image_keyend4_png"
 		},
 		{
-			"name": "image_keyMiddle1_png",
+			"url": "image/image_keyMiddle1.png",
 			"type": "image",
-			"url": "image/image_keyMiddle1.png"
+			"name": "image_keyMiddle1_png"
 		},
 		{
-			"name": "image_keyMiddle3_png",
+			"url": "image/image_keyMiddle3.png",
 			"type": "image",
-			"url": "image/image_keyMiddle3.png"
+			"name": "image_keyMiddle3_png"
 		},
 		{
-			"name": "image_keyMiddle4_png",
+			"url": "image/image_keyMiddle4.png",
 			"type": "image",
-			"url": "image/image_keyMiddle4.png"
+			"name": "image_keyMiddle4_png"
 		},
 		{
-			"name": "image_keyStart12_png",
+			"url": "image/image_keyStart12.png",
 			"type": "image",
-			"url": "image/image_keyStart12.png"
+			"name": "image_keyStart12_png"
 		},
 		{
-			"name": "image_keyStart22_png",
+			"url": "image/image_keyStart22.png",
 			"type": "image",
-			"url": "image/image_keyStart22.png"
+			"name": "image_keyStart22_png"
 		},
 		{
-			"name": "image_keyStart11_png",
+			"url": "image/image_keyStart11.png",
 			"type": "image",
-			"url": "image/image_keyStart11.png"
+			"name": "image_keyStart11_png"
 		},
 		{
-			"name": "image_keyMiddle2_png",
+			"url": "image/image_keyMiddle2.png",
 			"type": "image",
-			"url": "image/image_keyMiddle2.png"
+			"name": "image_keyMiddle2_png"
 		},
 		{
-			"name": "image_keyStart31_png",
+			"url": "image/image_keyStart31.png",
 			"type": "image",
-			"url": "image/image_keyStart31.png"
+			"name": "image_keyStart31_png"
 		},
 		{
-			"name": "image_keyStart41_png",
+			"url": "image/image_keyStart41.png",
 			"type": "image",
-			"url": "image/image_keyStart41.png"
+			"name": "image_keyStart41_png"
 		},
 		{
-			"name": "image_keyStart32_png",
+			"url": "image/image_keyStart32.png",
 			"type": "image",
-			"url": "image/image_keyStart32.png"
+			"name": "image_keyStart32_png"
 		},
 		{
-			"name": "image_keyStart42_png",
+			"url": "image/image_keyStart42.png",
 			"type": "image",
-			"url": "image/image_keyStart42.png"
+			"name": "image_keyStart42_png"
 		},
 		{
-			"name": "image_keyStart21_png",
+			"url": "image/image_keyStart21.png",
 			"type": "image",
-			"url": "image/image_keyStart21.png"
+			"name": "image_keyStart21_png"
 		},
 		{
-			"name": "sound_start_mp3",
+			"url": "sound/sound_start.mp3",
 			"type": "sound",
-			"url": "sound/sound_start.mp3"
+			"name": "sound_start_mp3"
 		},
 		{
-			"name": "image_gameBg_jpg",
+			"url": "image/image_gameBg.jpg",
 			"type": "image",
-			"url": "image/image_gameBg.jpg"
+			"name": "image_gameBg_jpg"
 		},
 		{
-			"name": "image_return_png",
+			"url": "image/image_return.png",
 			"type": "image",
-			"url": "image/image_return.png"
+			"name": "image_return_png"
 		},
 		{
-			"name": "image_perBg_png",
+			"url": "image/image_perBg.png",
 			"type": "image",
-			"url": "image/image_perBg.png"
+			"name": "image_perBg_png"
 		},
 		{
-			"name": "movie_start1_json",
+			"url": "movie/movie_start1.json",
 			"type": "json",
-			"url": "movie/movie_start1.json"
+			"name": "movie_start1_json"
 		},
 		{
-			"name": "movie_start9_png",
+			"url": "movie/movie_start9.png",
 			"type": "image",
-			"url": "movie/movie_start9.png"
+			"name": "movie_start9_png"
 		},
 		{
-			"name": "movie_start8_png",
+			"url": "movie/movie_start8.png",
 			"type": "image",
-			"url": "movie/movie_start8.png"
+			"name": "movie_start8_png"
 		},
 		{
-			"name": "movie_start7_png",
+			"url": "movie/movie_start7.png",
 			"type": "image",
-			"url": "movie/movie_start7.png"
+			"name": "movie_start7_png"
 		},
 		{
-			"name": "movie_start8_json",
+			"url": "movie/movie_start8.json",
 			"type": "json",
-			"url": "movie/movie_start8.json"
+			"name": "movie_start8_json"
 		},
 		{
-			"name": "movie_start9_json",
+			"url": "movie/movie_start9.json",
 			"type": "json",
-			"url": "movie/movie_start9.json"
+			"name": "movie_start9_json"
 		},
 		{
-			"name": "movie_start6_png",
+			"url": "movie/movie_start6.png",
 			"type": "image",
-			"url": "movie/movie_start6.png"
+			"name": "movie_start6_png"
 		},
 		{
-			"name": "movie_start5_png",
+			"url": "movie/movie_start5.png",
 			"type": "image",
-			"url": "movie/movie_start5.png"
+			"name": "movie_start5_png"
 		},
 		{
-			"name": "movie_start4_png",
+			"url": "movie/movie_start4.png",
 			"type": "image",
-			"url": "movie/movie_start4.png"
+			"name": "movie_start4_png"
 		},
 		{
-			"name": "movie_start3_png",
+			"url": "movie/movie_start3.png",
 			"type": "image",
-			"url": "movie/movie_start3.png"
+			"name": "movie_start3_png"
 		},
 		{
-			"name": "movie_start4_json",
+			"url": "movie/movie_start4.json",
 			"type": "json",
-			"url": "movie/movie_start4.json"
+			"name": "movie_start4_json"
 		},
 		{
-			"name": "movie_start5_json",
+			"url": "movie/movie_start5.json",
 			"type": "json",
-			"url": "movie/movie_start5.json"
+			"name": "movie_start5_json"
 		},
 		{
-			"name": "movie_start7_json",
+			"url": "movie/movie_start7.json",
 			"type": "json",
-			"url": "movie/movie_start7.json"
+			"name": "movie_start7_json"
 		},
 		{
-			"name": "movie_start3_json",
+			"url": "movie/movie_start3.json",
 			"type": "json",
-			"url": "movie/movie_start3.json"
+			"name": "movie_start3_json"
 		},
 		{
-			"name": "movie_start6_json",
+			"url": "movie/movie_start6.json",
 			"type": "json",
-			"url": "movie/movie_start6.json"
+			"name": "movie_start6_json"
 		},
 		{
-			"name": "movie_start2_json",
+			"url": "movie/movie_start2.json",
 			"type": "json",
-			"url": "movie/movie_start2.json"
+			"name": "movie_start2_json"
 		},
 		{
-			"name": "movie_start10_json",
+			"url": "movie/movie_start10.json",
 			"type": "json",
-			"url": "movie/movie_start10.json"
+			"name": "movie_start10_json"
 		},
 		{
-			"name": "movie_start10_png",
+			"url": "movie/movie_start10.png",
 			"type": "image",
-			"url": "movie/movie_start10.png"
+			"name": "movie_start10_png"
 		},
 		{
-			"name": "movie_start2_png",
+			"url": "movie/movie_start2.png",
 			"type": "image",
-			"url": "movie/movie_start2.png"
+			"name": "movie_start2_png"
 		},
 		{
-			"name": "movie_start1_png",
+			"url": "movie/movie_start1.png",
 			"type": "image",
-			"url": "movie/movie_start1.png"
+			"name": "movie_start1_png"
 		},
 		{
-			"name": "sound_light_mp3",
+			"url": "sound/sound_light.mp3",
 			"type": "sound",
-			"url": "sound/sound_light.mp3"
+			"name": "sound_light_mp3"
 		},
 		{
-			"name": "sound_cheer_mp3",
+			"url": "sound/sound_cheer.mp3",
 			"type": "sound",
-			"url": "sound/sound_cheer.mp3"
+			"name": "sound_cheer_mp3"
 		},
 		{
-			"name": "sound_ready_wav",
+			"url": "sound/sound_ready.wav",
 			"type": "sound",
-			"url": "sound/sound_ready.wav"
+			"name": "sound_ready_wav"
 		},
 		{
-			"name": "movie_scene1_json",
+			"url": "movie/movie_scene1.json",
 			"type": "json",
-			"url": "movie/movie_scene1.json"
+			"name": "movie_scene1_json"
 		},
 		{
-			"name": "movie_scene1_png",
+			"url": "movie/movie_scene1.png",
 			"type": "image",
-			"url": "movie/movie_scene1.png"
+			"name": "movie_scene1_png"
 		},
 		{
-			"name": "movie_scene2_json",
+			"url": "movie/movie_scene2.json",
 			"type": "json",
-			"url": "movie/movie_scene2.json"
+			"name": "movie_scene2_json"
 		},
 		{
-			"name": "movie_scene2_png",
+			"url": "movie/movie_scene2.png",
 			"type": "image",
-			"url": "movie/movie_scene2.png"
+			"name": "movie_scene2_png"
 		},
 		{
-			"name": "movie_per_json",
+			"url": "movie/movie_per.json",
 			"type": "json",
-			"url": "movie/movie_per.json"
+			"name": "movie_per_json"
 		},
 		{
-			"name": "movie_per_png",
+			"url": "movie/movie_per.png",
 			"type": "image",
-			"url": "movie/movie_per.png"
+			"name": "movie_per_png"
 		},
 		{
-			"name": "image_sideline_png",
+			"url": "image/image_sideline.png",
 			"type": "image",
-			"url": "image/image_sideline.png"
+			"name": "image_sideline_png"
 		},
 		{
-			"name": "image_great_png",
+			"url": "image/image_great.png",
 			"type": "image",
-			"url": "image/image_great.png"
+			"name": "image_great_png"
 		},
 		{
-			"name": "image_miss_png",
+			"url": "image/image_miss.png",
 			"type": "image",
-			"url": "image/image_miss.png"
+			"name": "image_miss_png"
 		},
 		{
-			"name": "image_perfect_png",
+			"url": "image/image_perfect.png",
 			"type": "image",
-			"url": "image/image_perfect.png"
+			"name": "image_perfect_png"
 		},
 		{
-			"name": "keyPress4_png",
+			"url": "image/image_keyPress1.png",
 			"type": "image",
-			"url": "image/keyPress4.png"
+			"name": "image_keyPress1_png"
 		},
 		{
-			"name": "image_keyPress1_png",
+			"url": "image/image_keyPress2.png",
 			"type": "image",
-			"url": "image/image_keyPress1.png"
+			"name": "image_keyPress2_png"
 		},
 		{
-			"name": "image_keyPress2_png",
+			"url": "image/image_keyPress3.png",
 			"type": "image",
-			"url": "image/image_keyPress2.png"
+			"name": "image_keyPress3_png"
 		},
 		{
-			"name": "image_keyPress3_png",
+			"url": "image/image_keyPress4.png",
 			"type": "image",
-			"url": "image/image_keyPress3.png"
+			"name": "image_keyPress4_png"
 		},
 		{
-			"name": "image_keyPress4_png",
+			"url": "font/font_combo.fnt",
+			"type": "font",
+			"name": "font_combo_fnt"
+		},
+		{
+			"name": "font_score_fnt",
+			"type": "font",
+			"url": "font/font_score.fnt"
+		},
+		{
+			"name": "font_score_png",
 			"type": "image",
-			"url": "image/image_keyPress4.png"
+			"url": "font/font_score.png"
+		},
+		{
+			"name": "font_combo_png",
+			"type": "image",
+			"url": "font/font_combo.png"
 		}
 	]
 }

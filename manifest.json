@@ -9,12 +9,12 @@
 		"promise/bin/promise.js"
 	],
 	"game": [
-		"bin-debug/Main.js",
 		"bin-debug/common/GameConst.js",
+		"bin-debug/event/EventManager.js",
 		"bin-debug/common/MyButton.js",
 		"bin-debug/config/ConfigManager.js",
 		"bin-debug/event/DataEvent.js",
-		"bin-debug/event/EventManager.js",
+		"bin-debug/Main.js",
 		"bin-debug/note/NoteItem.js",
 		"bin-debug/note/NoteManager.js",
 		"bin-debug/panel/GamePanel.js",

@@ -30,7 +30,11 @@ class GamePanel extends egret.DisplayObjectContainer
     private _bmpPerfect:egret.Bitmap;
     private _bmpGreat:egret.Bitmap;
     private _bmpMiss:egret.Bitmap;
-    //音符统计
+    //音符连击，分数，音符计数
+    private _bmtextCombo:egret.BitmapText;
+    private _nCurCombo:number;
+    private _bmtextScore:egret.BitmapText;
+    private _nScore:number;
     private _textPerNum:egret.TextField;
     private _nPerNum:number;
     //返回按钮
@@ -98,6 +102,8 @@ class GamePanel extends egret.DisplayObjectContainer
      */
     private InitData():void
     {
+        this._nCurCombo = 0;
+        this._nScore = 0;
         this._nPerNum = 0;
         this._nGameTime = 0;
         this._nTimeFlag = 0;
@@ -269,7 +275,29 @@ class GamePanel extends egret.DisplayObjectContainer
         this._bmpMiss.texture = texture6;
         this._bmpMiss.visible = false;
         this._LayerUI.addChild(this._bmpMiss);
-        //音符统计
+        //音符连击，分数，音符计数
+        if (!this._bmtextCombo)
+        {
+            this._bmtextCombo = new egret.BitmapText();
+        }
+        this._bmtextCombo.font = RES.getRes("font_combo_fnt");
+        this._bmtextCombo.width = 160;
+        this._bmtextCombo.height = 40;
+        this._bmtextCombo.textAlign = egret.HorizontalAlign.CENTER;
+        this._bmtextCombo.x = (this.stage.stageWidth - this._bmtextCombo.width) / 2;
+        this._bmtextCombo.y = this.stage.stageHeight * 69 / 256 - this._bmtextCombo.height / 2;
+        this._LayerUI.addChild(this._bmtextCombo);
+        if (!this._bmtextScore)
+        {
+            this._bmtextScore = new egret.BitmapText();
+        }
+        this._bmtextScore.font = RES.getRes("font_score_fnt");
+        this._bmtextScore.width = 240;
+        this._bmtextScore.height = 30;
+        this._bmtextScore.textAlign = egret.HorizontalAlign.CENTER;
+        this._bmtextScore.x = this.stage.stageWidth * 165 / 192 - this._bmtextScore.width / 2;
+        this._bmtextScore.y = this.stage.stageHeight * 5 / 128 - this._bmtextScore.height / 2;
+        this._LayerUI.addChild(this._bmtextScore);
         if (!this._textPerNum)
         {
             this._textPerNum = new egret.TextField();
@@ -373,10 +401,12 @@ class GamePanel extends egret.DisplayObjectContainer
         if (nCheckId == 1)
         {
             bmp = this._bmpPerfect;
+            this._nScore += GameConst.PERFECT_SCORE;
         }
         else if (nCheckId == 2)
         {
             bmp = this._bmpGreat;
+            this._nScore += GameConst.GREAT_SCORE;
         }
         else if (nCheckId == 3)
         {
@@ -384,16 +414,43 @@ class GamePanel extends egret.DisplayObjectContainer
         }
         if (bmp)
         {
+            egret.Tween.removeTweens(bmp);
+            bmp.scaleX = bmp.scaleY = 1;
             bmp.x = (this.stage.stageWidth - bmp.width) / 2;
             bmp.y = this.stage.stageHeight * 23 / 128 - bmp.height / 2;
-            bmp.scaleX = bmp.scaleY = 1;
             bmp.visible = true;
             var nTarX:number = bmp.x + bmp.width * 9 / 20;
             var nTarY:number = bmp.y + bmp.height * 9 / 20;
             egret.Tween.get(bmp).to({x:nTarX, y:nTarY, scaleX:0.1, scaleY:0.1}, 200).call(this.removeScoreCheck, this, [bmp]);
         }
+        if (nCheckId < 3)
+        {
+            this._nCurCombo ++;
+        }
+        else
+        {
+            this._nCurCombo = 0;
+        }
+        if (this._bmtextCombo)
+        {
+            if (this._nCurCombo > 0)
+            {
+                this._bmtextCombo.text = "" + this._nCurCombo;
+            }
+            else
+            {
+                this._bmtextCombo.text = "";
+            }
+        }
+        if (this._bmtextScore)
+        {
+            this._bmtextScore.text = "" + this._nScore;
+        }
         this._nPerNum ++;
-        this._textPerNum.text = "" + this._nPerNum;
+        if (this._textPerNum)
+        {
+            this._textPerNum.text = "" + this._nPerNum;
+        }
     }
 
     private removeScoreCheck(bmp:egret.Bitmap):void
@@ -670,11 +727,11 @@ class GamePanel extends egret.DisplayObjectContainer
             switch (nPerDownType)
             {
                 case 1:
-                    this._bPerDown1 = true;
                     if (!this._bPerDown1)
                     {
                         this._bmpPerPress1.visible = true;
                     }
+                    this._bPerDown1 = true;
                     if (this._bPerDown2)
                     {
                         this._bPerDown2 = false;
@@ -692,11 +749,11 @@ class GamePanel extends egret.DisplayObjectContainer
                     }
                     break;
                 case 2:
-                    this._bPerDown2 = true;
                     if (!this._bPerDown2)
                     {
                         this._bmpPerPress2.visible = true;
                     }
+                    this._bPerDown2 = true;
                     if (this._bPerDown1)
                     {
                         this._bPerDown1 = false;
@@ -714,11 +771,11 @@ class GamePanel extends egret.DisplayObjectContainer
                     }
                     break;
                 case 3:
-                    this._bPerDown3 = true;
                     if (!this._bPerDown3)
                     {
                         this._bmpPerPress3.visible = true;
                     }
+                    this._bPerDown3 = true;
                     if (this._bPerDown1)
                     {
                         this._bPerDown1 = false;
@@ -736,11 +793,11 @@ class GamePanel extends egret.DisplayObjectContainer
                     }
                     break;
                 case 4:
-                    this._bPerDown4 = true;
                     if (!this._bPerDown4)
                     {
                         this._bmpPerPress4.visible = true;
                     }
+                    this._bPerDown4 = true;
                     if (this._bPerDown1)
                     {
                         this._bPerDown1 = false;
@@ -835,6 +892,18 @@ class GamePanel extends egret.DisplayObjectContainer
 
     private removeNote(note:NoteItem):void
     {
+        if (note && note.nNoteType == 42)
+        {
+            console.log("key"+note.nKey);
+            if (note.parent)
+            {
+                console.log("parent");
+            }
+            else
+            {
+                console.log("no parent");
+            }
+        }
         if (note && note.parent)
         {
             NoteManager.getInstance().HideNote(note);
@@ -914,6 +983,8 @@ class GamePanel extends egret.DisplayObjectContainer
     private onGameSoundComplete(event:egret.Event):void
     {
         egret.stopTick(this.timerFunc, this);
+        egret.clearTimeout(this._nTimeOutId1);
+        this._bmpSideLine.alpha = 0;
         this._mcScene.stop();
         this._mcScene.removeEventListener(egret.Event.COMPLETE, this.onSceneMcComplete, this);
         if (this._mcScene && this._mcScene.parent)
@@ -1001,6 +1072,8 @@ class GamePanel extends egret.DisplayObjectContainer
         this._bmpPerfect = null;
         this._bmpGreat = null;
         this._bmpMiss = null;
+        this._bmtextCombo = null;
+        this._bmtextScore = null;
         this._textPerNum = null;
         this._btnReturn = null;
         this._soundReady = null;
